@@ -1,0 +1,2016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reporte de Partner Marketing · Email</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg: #000b19;
+  --bg2: #001a3d;
+  --primary: #0059d5;
+  --primary-light: #3d7fe0;
+  --primary-dark: #0044a8;
+  --accent: #5ecfff;
+  --green: #00d97e;
+  --yellow: #f5a623;
+  --red: #ff4d6d;
+  --white: #ffffff;
+  --gray-100: #f5f7fa;
+  --gray-200: #e8ecf0;
+  --gray-300: #9ca3af;
+  --gray-400: #9ca3af;
+  --gray-500: #4b5563;
+  --gray-600: #4b5563;
+  --gray-700: #1e3248;
+  --card: rgba(255,255,255,0.04);
+  --card-border: rgba(255,255,255,0.08);
+  --font: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  --radius: 16px;
+  --shadow: 0 4px 24px rgba(0,0,0,0.4);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;font-family:inherit}
+input,button,select,textarea,optgroup{font-family:var(--font)}
+html{font-size:16px;scroll-behavior:smooth}
+body{
+  background: radial-gradient(ellipse at 110% 0%, #0050c4 0%, #000b19 40%, #000b19 100%);
+  background-attachment: fixed;
+  color:var(--white);font-family:var(--font);min-height:100vh;line-height:1.5;
+}
+
+/* ── SIDEBAR ── */
+:root{--sb-width:220px}
+#sidebar{
+  position:fixed;top:0;left:0;bottom:0;width:var(--sb-width);
+  background:rgba(0,11,25,0.97);
+  border-right:1px solid rgba(255,255,255,0.08);
+  backdrop-filter:blur(24px);
+  display:flex;flex-direction:column;
+  z-index:100;overflow-y:auto;overflow-x:hidden;
+  scrollbar-width:thin;scrollbar-color:var(--gray-700) transparent;
+}
+.sb-header{padding:20px 18px 16px;border-bottom:1px solid var(--card-border);flex-shrink:0}
+.sb-logo{font-size:15px;font-weight:800;color:#fff;letter-spacing:-.02em}
+.sb-logo span{font-weight:300}
+.sb-report{font-size:10px;font-weight:600;letter-spacing:.07em;text-transform:uppercase;color:var(--gray-500);margin-top:5px;line-height:1.4}
+.sb-body{padding:14px 10px;display:flex;flex-direction:column;gap:16px;flex:1}
+.sb-label{font-size:10px;font-weight:700;letter-spacing:.10em;text-transform:uppercase;color:var(--gray-500);padding:0 8px;margin-bottom:5px}
+/* ── PERIOD PICKER ── */
+#period-picker{position:relative}
+#period-btn{
+  width:100%;font-size:12px;padding:7px 10px;border-radius:8px;
+  border:1px solid var(--card-border);background:rgba(255,255,255,0.06);
+  color:var(--white);cursor:pointer;font-family:var(--font);
+  display:flex;justify-content:space-between;align-items:center;gap:6px;
+  text-align:left;transition:border-color .15s,background .15s;
+}
+#period-btn:hover{background:rgba(255,255,255,0.10);border-color:rgba(255,255,255,0.18)}
+#period-btn.open{border-color:var(--primary);background:rgba(0,89,213,.15)}
+#period-btn svg{flex-shrink:0;opacity:.5;transition:transform .2s}
+#period-btn.open svg{transform:rotate(180deg)}
+#period-label{flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#period-panel{
+  display:none;position:absolute;left:0;right:0;top:calc(100% + 6px);
+  background:#001a3d;border:1px solid var(--card-border);border-radius:10px;
+  box-shadow:0 8px 32px rgba(0,0,0,.5);z-index:200;overflow:hidden;
+}
+#period-panel.open{display:block}
+.pp-presets{display:flex;flex-direction:column;gap:1px;padding:6px}
+.pp-preset{
+  font-size:11px;font-weight:600;padding:6px 10px;border-radius:6px;
+  border:none;background:none;color:rgba(255,255,255,.55);cursor:pointer;
+  text-align:left;transition:background .15s,color .15s;
+}
+.pp-preset:hover{background:rgba(255,255,255,.07);color:var(--white)}
+.pp-preset.active{background:rgba(0,89,213,.25);color:var(--accent)}
+.pp-divider{height:1px;background:var(--card-border);margin:2px 0}
+.pp-months{max-height:160px;overflow-y:auto;padding:6px;display:flex;flex-direction:column;gap:1px;
+  scrollbar-width:thin;scrollbar-color:var(--gray-700) transparent}
+.pp-month{
+  display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;
+  color:rgba(255,255,255,.65);padding:5px 8px;border-radius:6px;cursor:pointer;
+  transition:background .15s,color .15s;user-select:none;
+}
+.pp-month:hover{background:rgba(255,255,255,.06);color:var(--white)}
+.pp-month input[type=checkbox]{
+  accent-color:var(--primary);width:13px;height:13px;cursor:pointer;flex-shrink:0;
+}
+.pp-month.checked{color:var(--white)}
+/* ── Range picker ── */
+.pp-range{display:none;padding:8px 10px 10px;flex-direction:column;gap:8px}
+.pp-range.open{display:flex}
+.pp-range-row{display:grid;grid-template-columns:1fr 1fr;gap:6px}
+.pp-range-field{display:flex;flex-direction:column;gap:3px}
+.pp-range-field label{font-size:9px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:rgba(255,255,255,.35)}
+.pp-range-field select{
+  font-size:11px;font-weight:500;padding:5px 8px;border-radius:6px;
+  border:1px solid var(--card-border);background:rgba(255,255,255,.06);
+  color:var(--white);cursor:pointer;font-family:var(--font);width:100%;
+}
+.pp-range-field select option{background:#001328;color:#fff}
+.pp-range-apply{
+  font-size:11px;font-weight:700;padding:7px;border-radius:6px;
+  border:none;background:var(--primary);color:#fff;cursor:pointer;
+  transition:background .15s;
+}
+.pp-range-apply:hover{background:var(--primary-light)}
+.sb-segs{display:flex;flex-direction:column;gap:4px}
+.seg-btn{
+  font-size:11px;font-weight:600;padding:6px 10px;border-radius:7px;
+  border:1px solid var(--card-border);background:transparent;
+  color:var(--gray-300);cursor:pointer;transition:all .18s;text-align:left;width:100%;
+}
+.seg-btn:hover{color:var(--white);background:rgba(255,255,255,0.06)}
+.seg-btn.active{border-color:var(--primary);background:rgba(0,89,213,.18);color:#fff}
+.seg-btn.seg-mass.active{background:rgba(124,58,237,.2);border-color:#7c3aed;color:#c4b5fd}
+.seg-btn.seg-mid.active{background:rgba(8,145,178,.2);border-color:#0891b2;color:#67e8f9}
+.seg-btn.seg-small.active{background:rgba(5,150,105,.2);border-color:#059669;color:#6ee7b7}
+.sb-links{display:flex;flex-direction:column;gap:1px}
+.sb-link{
+  font-size:12px;font-weight:500;padding:7px 10px;border-radius:7px;
+  color:var(--gray-300);cursor:pointer;border:none;background:none;
+  text-align:left;transition:all .18s;width:100%;display:flex;align-items:center;gap:7px;
+}
+.sb-link:hover{color:var(--white);background:rgba(255,255,255,0.06)}
+.sb-link.active{color:var(--white);background:rgba(0,89,213,.2);font-weight:600}
+.sb-link.active .sb-dot{opacity:1}
+.sb-dot{width:5px;height:5px;border-radius:50%;background:var(--accent);flex-shrink:0;opacity:0;transition:opacity .2s}
+.sb-import{padding:0 0 4px;margin-top:auto;display:flex;flex-direction:column;gap:8px}
+.sheet-status{
+  font-size:10px;font-weight:600;padding:6px 10px;border-radius:6px;
+  display:flex;align-items:center;gap:6px;line-height:1.3;
+}
+.sheet-status.loading{background:rgba(245,166,35,.1);color:var(--yellow);border:1px solid rgba(245,166,35,.2)}
+.sheet-status.ok{background:rgba(0,217,126,.08);color:var(--green);border:1px solid rgba(0,217,126,.2)}
+.sheet-status.error{background:rgba(255,77,109,.08);color:var(--red);border:1px solid rgba(255,77,109,.2)}
+.import-btn{
+  width:100%;font-size:11px;font-weight:600;padding:9px 12px;border-radius:8px;
+  border:1px solid rgba(94,207,255,.35);background:rgba(94,207,255,.07);color:var(--accent);
+  cursor:pointer;transition:all .2s;text-align:center;
+}
+.import-btn:hover{background:var(--accent);color:var(--bg)}
+
+/* ── LAYOUT ── */
+body{padding-left:var(--sb-width)}
+main{
+  max-width:960px;
+  margin:0 auto;
+  padding:32px 32px 80px;
+}
+section.section{scroll-margin-top:28px}
+.section{margin-bottom:44px}
+.section-header{margin-bottom:18px}
+.section-eyebrow{
+  font-size:0.6rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+  color:var(--gray-500);margin-bottom:5px;
+}
+.section-title{font-size:1.15rem;font-weight:800;color:var(--white);line-height:1.2;letter-spacing:-0.01em}
+.section-sub{font-size:12px;color:var(--gray-500);margin-top:3px;line-height:1.6}
+
+/* ── CARDS ── */
+.card{
+  background:var(--card);border:1px solid var(--card-border);
+  border-radius:var(--radius);padding:20px;
+  backdrop-filter:blur(8px);
+  transition: border-color 0.3s cubic-bezier(0.4,0,0.2,1), background 0.3s cubic-bezier(0.4,0,0.2,1);
+}
+.card:hover{
+  background:rgba(255,255,255,0.07);
+  border-color:rgba(255,255,255,0.15);
+}
+.grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:14px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.grid-2{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
+.grid-2-1{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+@media(max-width:960px){.grid-5{grid-template-columns:repeat(3,1fr)}.grid-4{grid-template-columns:repeat(2,1fr)}.grid-3{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:900px){.grid-2-1{grid-template-columns:1fr}.grid-2{grid-template-columns:1fr}}
+@media(max-width:600px){.grid-5,.grid-4,.grid-3{grid-template-columns:1fr}}
+
+/* ── KPI SUMMARY PANEL (volumen) ── */
+.kpi-summary{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:0;
+  background:var(--card);
+  border:1px solid var(--card-border);
+  border-radius:var(--radius);
+  overflow:hidden;
+}
+.kpi-summary-item{
+  padding:20px 22px;
+  display:flex;flex-direction:column;gap:4px;
+  border-right:1px solid var(--card-border);
+  position:relative;
+}
+.kpi-summary-item:last-child{border-right:none}
+.kpi-summary-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35)}
+.kpi-summary-value{font-size:24px;font-weight:800;color:var(--white);line-height:1;letter-spacing:-0.02em}
+.kpi-summary-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px;line-height:1.4}
+@media(max-width:960px){
+  .kpi-summary{grid-template-columns:repeat(2,1fr)}
+  .kpi-summary-item:nth-child(2){border-right:none}
+  .kpi-summary-item:nth-child(3),.kpi-summary-item:nth-child(4){border-top:1px solid var(--card-border)}
+}
+@media(max-width:600px){.kpi-summary{grid-template-columns:1fr}.kpi-summary-item{border-right:none;border-bottom:1px solid var(--card-border)}.kpi-summary-item:last-child{border-bottom:none}}
+
+/* ── KPI CARDS ── */
+.kpi-card{padding:18px 20px;display:flex;flex-direction:column;gap:5px;position:relative;overflow:hidden}
+.kpi-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;border-radius:var(--radius) var(--radius) 0 0}
+.kpi-card.good::before{background:var(--green)}
+.kpi-card.warn::before{background:var(--yellow)}
+.kpi-card.bad::before{background:var(--red)}
+.kpi-label{font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35)}
+.kpi-value{font-size:28px;font-weight:800;line-height:1;color:var(--white);letter-spacing:-0.02em}
+.kpi-sub{font-size:11px;color:rgba(255,255,255,0.45);line-height:1.5}
+.status-dot{display:inline-block;width:7px;height:7px;border-radius:50%;margin-right:4px;flex-shrink:0}
+.status-dot.good{background:var(--green)}
+.status-dot.warn{background:var(--yellow)}
+.status-dot.bad{background:var(--red)}
+.kpi-bench{font-size:10px;margin-top:3px;display:flex;align-items:center;gap:4px;color:var(--gray-500)}
+
+/* ── CHART CONTAINERS ── */
+.chart-wrap{position:relative;width:100%}
+canvas{max-width:100%}
+
+/* ── SEGMENT TABS inside section ── */
+.seg-tabs{display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap}
+.seg-tab{
+  font-size:12px;font-weight:600;padding:6px 14px;border-radius:20px;
+  border:1px solid var(--card-border);background:var(--card);
+  color:var(--gray-300);cursor:pointer;transition:all .2s;
+}
+.seg-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+
+/* ── BADGE ── */
+.badge{display:inline-block;padding:2px 7px;border-radius:4px;font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase}
+.badge-event{background:rgba(124,58,237,.3);color:#c4b5fd}
+.badge-edu{background:rgba(6,182,212,.3);color:#67e8f9}
+.badge-news{background:rgba(245,166,35,.3);color:#fcd34d}
+.badge-acct{background:rgba(16,185,129,.3);color:#6ee7b7}
+.badge-promo{background:rgba(255,77,109,.3);color:#fca5a5}
+.badge-other{background:rgba(100,116,139,.3);color:#94a3b8}
+.bar-mini{height:4px;border-radius:3px;background:var(--primary);margin-top:5px}
+
+/* ── PERFORMER LIST ── */
+.perf-list{display:flex;flex-direction:column;gap:2px}
+.perf-item{
+  display:grid;grid-template-columns:28px 1fr auto;
+  align-items:center;gap:10px;
+  padding:9px 12px;border-radius:10px;
+  transition:background .15s;
+}
+.perf-item:hover{background:rgba(255,255,255,0.04)}
+.perf-num{
+  font-size:12px;font-weight:800;
+  color:var(--gray-500);
+  width:24px;height:24px;border-radius:6px;
+  background:rgba(255,255,255,0.05);
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.perf-num.top1{background:rgba(255,200,0,.15);color:#fcd34d}
+.perf-num.top2{background:rgba(180,180,180,.12);color:#d1d5db}
+.perf-num.top3{background:rgba(180,100,40,.12);color:#fdba74}
+.perf-body{min-width:0}
+.perf-title{
+  font-size:12px;font-weight:600;color:var(--white);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.perf-meta{
+  font-size:10px;color:var(--gray-500);margin-top:1px;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+.perf-val{
+  font-size:16px;font-weight:800;line-height:1;text-align:right;flex-shrink:0;
+}
+.perf-bar{height:3px;border-radius:2px;margin-top:3px;background:rgba(255,255,255,0.06);overflow:hidden}
+.perf-bar-fill{height:100%;border-radius:2px;transition:width .4s cubic-bezier(.4,0,.2,1)}
+.perf-card-header{
+  display:flex;align-items:center;gap:10px;
+  padding:0 4px 12px;border-bottom:1px solid var(--card-border);margin-bottom:10px;
+}
+.perf-card-badge{
+  width:32px;height:32px;border-radius:10px;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.perf-card-title{font-size:12px;font-weight:700;color:var(--white)}
+.perf-card-sub{font-size:10px;color:var(--gray-500);margin-top:1px}
+
+/* ── FULL TABLE ── */
+#full-table-wrap{overflow-x:auto;border-radius:var(--radius)}
+table.ftable{width:100%;border-collapse:collapse;font-size:12px}
+table.ftable th{background:var(--bg2);font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500);padding:10px 12px;border-bottom:1px solid var(--card-border);white-space:nowrap;cursor:pointer;position:sticky;top:0}
+table.ftable th:hover{color:var(--white)}
+table.ftable td{padding:9px 12px;border-bottom:1px solid rgba(255,255,255,0.04);white-space:nowrap}
+table.ftable tr:hover td{background:rgba(255,255,255,0.03)}
+.ftable .outlier{background:rgba(94,207,255,0.07)}
+.tbl-search{width:100%;padding:10px 14px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;color:var(--white);font-size:13px;margin-bottom:12px;outline:none}
+.tbl-search:focus{border-color:var(--primary)}
+
+/* ── INSIGHT CARDS ── */
+.insight-card{display:flex;gap:14px;align-items:flex-start}
+.insight-icon{width:22px;height:22px;flex-shrink:0;margin-top:2px;display:flex;align-items:center;justify-content:center}
+.insight-body h4{font-size:14px;font-weight:700;color:var(--white);margin-bottom:4px}
+.insight-body p{font-size:13px;color:var(--gray-300);line-height:1.6}
+.insight-body strong{color:var(--accent)}
+
+/* ── SCATTER LABELS ── */
+.scatter-legend{display:flex;flex-wrap:wrap;gap:10px;margin-top:12px}
+.scatter-legend-item{display:flex;align-items:center;gap:5px;font-size:11px;color:var(--gray-300)}
+.scatter-legend-dot{width:10px;height:10px;border-radius:50%}
+
+/* ── MODAL ── */
+#import-modal{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,0.7);align-items:center;justify-content:center;
+}
+#import-modal.open{display:flex}
+.modal-box{background:#001a3d;border:1px solid rgba(255,255,255,0.12);border-radius:16px;padding:28px;max-width:520px;width:90%;box-shadow:var(--shadow)}
+.modal-box h3{font-size:18px;font-weight:700;margin-bottom:8px}
+.modal-box p{font-size:13px;color:var(--gray-300);margin-bottom:16px;line-height:1.6}
+.modal-box textarea{width:100%;min-height:160px;padding:10px;background:var(--card);border:1px solid var(--card-border);border-radius:8px;color:var(--white);font-size:12px;font-family:var(--font);resize:vertical;outline:none;margin-bottom:12px}
+.modal-actions{display:flex;gap:10px;justify-content:flex-end}
+.btn{padding:8px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;border:none;transition:all .2s}
+.btn-primary{background:var(--primary);color:#fff}
+.btn-primary:hover{background:var(--primary-dark)}
+.btn-ghost{background:var(--card);border:1px solid var(--card-border);color:var(--gray-300)}
+.btn-ghost:hover{color:var(--white)}
+.modal-file-area{border:2px dashed var(--card-border);border-radius:8px;padding:20px;text-align:center;margin-bottom:12px;cursor:pointer;transition:all .2s}
+.modal-file-area:hover{border-color:var(--accent);background:rgba(94,207,255,0.05)}
+.modal-file-area input{display:none}
+.modal-tabs{display:flex;gap:8px;margin-bottom:16px}
+.modal-tab{padding:5px 14px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;border:1px solid var(--card-border);background:var(--card);color:var(--gray-300)}
+.modal-tab.active{background:var(--primary);border-color:var(--primary);color:#fff}
+.notice{font-size:12px;color:var(--gray-300);background:rgba(94,207,255,.08);border:1px solid rgba(94,207,255,.2);border-radius:8px;padding:10px 12px;margin-top:8px}
+
+/* ── TOOLTIPS ── */
+.tt-icon{
+  display:inline-flex;align-items:center;justify-content:center;
+  width:13px;height:13px;border-radius:50%;
+  background:rgba(255,255,255,.12);color:rgba(255,255,255,.45);
+  font-size:8px;font-weight:700;font-style:normal;cursor:help;
+  margin-left:5px;flex-shrink:0;transition:background .15s,color .15s;
+  line-height:1;user-select:none;vertical-align:middle;
+}
+.tt-icon:hover,.tt-icon:focus{background:var(--primary);color:#fff;outline:none}
+#tt-global{
+  position:fixed;z-index:9999;pointer-events:none;
+  background:#0a1f3d;border:1px solid rgba(255,255,255,.18);
+  border-radius:9px;padding:10px 13px;
+  font-size:10px;font-weight:400;line-height:1.6;color:rgba(255,255,255,.8);
+  width:210px;box-shadow:0 8px 32px rgba(0,0,0,.6);
+  opacity:0;transition:opacity .12s;
+}
+#tt-global.visible{opacity:1}
+#tt-global strong{color:#fff;font-weight:700;display:block;margin-bottom:4px}
+#tt-global code{
+  font-family:'SF Mono',monospace;font-size:9px;
+  background:rgba(94,207,255,.12);color:var(--accent);
+  padding:1px 6px;border-radius:4px;display:inline-block;margin:3px 0;
+}
+#tt-global em{color:rgba(255,255,255,.4);font-style:normal;font-size:9px;display:block;margin-top:3px}
+
+/* ── METODOLOGÍA ── */
+.metodo-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:960px){.metodo-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:600px){.metodo-grid{grid-template-columns:1fr}}
+.metodo-card{padding:18px 20px;display:flex;flex-direction:column;gap:8px}
+.metodo-name{font-size:11px;font-weight:800;letter-spacing:.06em;text-transform:uppercase;color:var(--accent)}
+.metodo-formula{font-family:'SF Mono',monospace;font-size:11px;color:rgba(255,255,255,.7);background:rgba(94,207,255,.08);border:1px solid rgba(94,207,255,.18);border-radius:6px;padding:6px 10px;line-height:1.5}
+.metodo-desc{font-size:11px;color:rgba(255,255,255,.55);line-height:1.6}
+.metodo-bench{font-size:10px;color:rgba(255,255,255,.35);border-top:1px solid var(--card-border);padding-top:8px;margin-top:2px;line-height:1.5}
+.metodo-bench span{font-weight:700}
+
+/* ── METODOLOGÍA DRAWER ── */
+#metodo-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:300;backdrop-filter:blur(3px)}
+#metodo-overlay.open{display:block}
+#metodo-drawer{
+  position:fixed;top:0;right:0;bottom:0;width:min(640px,90vw);
+  background:#000f28;border-left:1px solid var(--card-border);
+  z-index:301;overflow-y:auto;transform:translateX(100%);
+  transition:transform .3s cubic-bezier(0.4,0,0.2,1);
+  padding:32px 32px 48px;
+  scrollbar-width:thin;scrollbar-color:var(--gray-700) transparent;
+}
+#metodo-drawer.open{transform:translateX(0)}
+.metodo-drawer-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:24px}
+.metodo-drawer-header h2{font-size:1.1rem;font-weight:800;color:var(--white)}
+.metodo-drawer-header p{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px}
+#metodo-close{
+  background:rgba(255,255,255,.07);border:1px solid var(--card-border);
+  color:rgba(255,255,255,.5);width:30px;height:30px;border-radius:8px;
+  cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;transition:background .15s,color .15s;
+}
+#metodo-close:hover{background:rgba(255,255,255,.14);color:#fff}
+
+/* ── TABLE PAGINATION ── */
+.tbl-pagination{display:flex;align-items:center;justify-content:space-between;margin-top:12px;gap:10px}
+.tbl-pagination-info{font-size:11px;color:rgba(255,255,255,.4)}
+.tbl-pagination-btns{display:flex;gap:6px}
+.tbl-pg-btn{
+  font-size:11px;font-weight:600;padding:5px 12px;border-radius:7px;
+  border:1px solid var(--card-border);background:rgba(255,255,255,.05);
+  color:rgba(255,255,255,.55);cursor:pointer;transition:all .15s;
+}
+.tbl-pg-btn:hover:not(:disabled){background:rgba(255,255,255,.10);color:#fff}
+.tbl-pg-btn:disabled{opacity:.25;cursor:default}
+.tbl-pg-btn.active{background:rgba(0,89,213,.3);border-color:var(--primary);color:#fff}
+
+/* ── MISC ── */
+.empty-state{text-align:center;padding:40px;color:var(--gray-500);font-size:13px}
+.sep{border:none;border-top:1px solid var(--card-border);margin:32px 0}
+.label{font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--gray-500)}
+.bench-line{stroke-dasharray:4,3;stroke-width:1.5}
+.tag-mass{color:#c4b5fd;font-size:11px;font-weight:700}
+.tag-mid{color:#67e8f9;font-size:11px;font-weight:700}
+.tag-small{color:#6ee7b7;font-size:11px;font-weight:700}
+</style>
+</head>
+<body>
+
+<!-- TOOLTIP GLOBAL -->
+<div id="tt-global"></div>
+
+<!-- SIDEBAR -->
+<nav id="sidebar">
+  <div class="sb-header">
+    <div class="sb-logo">Tiendanube <span>Partners</span></div>
+    <div class="sb-report">Reporte de Partner<br>Marketing · Email</div>
+  </div>
+  <div class="sb-body">
+    <div>
+      <div class="sb-label">Período</div>
+      <div id="period-picker">
+        <button id="period-btn" onclick="togglePeriodPanel(event)">
+          <span id="period-label">Todo el período</span>
+          <svg width="10" height="10" viewBox="0 0 10 10" fill="none"><path d="M2 3.5L5 6.5L8 3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <div id="period-panel">
+          <div class="pp-presets">
+            <button class="pp-preset active" data-preset="all"    onclick="applyPreset('all')">Todo el período</button>
+            <button class="pp-preset"        data-preset="3"      onclick="applyPreset('3')">Últimos 3 meses</button>
+            <button class="pp-preset"        data-preset="6"      onclick="applyPreset('6')">Últimos 6 meses</button>
+            <button class="pp-preset"        data-preset="range"  onclick="applyPreset('range')">Rango personalizado…</button>
+          </div>
+          <div class="pp-range" id="pp-range">
+            <div class="pp-range-row">
+              <div class="pp-range-field">
+                <label>Desde</label>
+                <select id="range-from"></select>
+              </div>
+              <div class="pp-range-field">
+                <label>Hasta</label>
+                <select id="range-to"></select>
+              </div>
+            </div>
+            <button class="pp-range-apply" onclick="applyRange()">Aplicar</button>
+          </div>
+          <div class="pp-divider" id="pp-months-divider"></div>
+          <div class="pp-months" id="pp-months"></div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="sb-label">Tamaño de la base</div>
+      <div class="sb-segs">
+        <button class="seg-btn active" data-seg="all" onclick="setSeg('all',this)">Todos los emails</button>
+        <button class="seg-btn seg-mass" data-seg="mass" onclick="setSeg('mass',this)">Base completa &gt;1.000 cont.</button>
+        <button class="seg-btn seg-mid" data-seg="mid" onclick="setSeg('mid',this)">Base mediana 100–1.000 cont.</button>
+        <button class="seg-btn seg-small" data-seg="small" onclick="setSeg('small',this)">Base micro &lt;100 cont.</button>
+      </div>
+    </div>
+    <div>
+      <div class="sb-label">Secciones</div>
+      <div class="sb-links">
+        <button class="sb-link" data-target="s-kpis" onclick="navTo('s-kpis')"><span class="sb-dot"></span>KPIs</button>
+        <button class="sb-link" data-target="s-evolution" onclick="navTo('s-evolution')"><span class="sb-dot"></span>Evolución</button>
+        <button class="sb-link" data-target="s-segments" onclick="navTo('s-segments')"><span class="sb-dot"></span>Segmentos</button>
+        <button class="sb-link" data-target="s-scatter" onclick="navTo('s-scatter')"><span class="sb-dot"></span>Volumen vs apertura</button>
+        <button class="sb-link" data-target="s-types" onclick="navTo('s-types')"><span class="sb-dot"></span>Rendimiento por tipo</button>
+        <button class="sb-link" data-target="s-saturation" onclick="navTo('s-saturation')"><span class="sb-dot"></span>Frecuencia de envío</button>
+        <button class="sb-link" data-target="s-performers" onclick="navTo('s-performers')"><span class="sb-dot"></span>Top performers</button>
+        <button class="sb-link" data-target="s-table" onclick="navTo('s-table')"><span class="sb-dot"></span>Tabla completa</button>
+        <button class="sb-link" data-target="s-insights" onclick="navTo('s-insights')"><span class="sb-dot"></span>Insights</button>
+        <button class="sb-link" onclick="openMetodo()"><span class="sb-dot"></span>Metodología ↗</button>
+      </div>
+    </div>
+    <div class="sb-import">
+      <div id="sheet-status" class="sheet-status loading">⏳ Cargando datos...</div>
+    </div>
+  </div>
+</nav>
+
+<main>
+
+<!-- ═══ SECTION: KPIs ═══ -->
+<section class="section" id="s-kpis">
+  <div class="section-header">
+    <div class="section-eyebrow">KPIs</div>
+    <h2 class="section-title">KPIs <span id="kpi-seg-label" style="font-size:13px;color:var(--gray-500);font-weight:400"></span></h2>
+  </div>
+  <div class="kpi-summary" id="kpi-vol"></div>
+  <div style="margin-top:20px;margin-bottom:10px;font-size:10px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:rgba(255,255,255,0.35)">Tasas de rendimiento</div>
+  <div class="grid-4" id="kpi-rates"></div>
+  <div style="margin-top:10px;font-size:10px;color:var(--gray-500)">
+    Métricas ponderadas por volumen. OR y CTR sobre entregados (= criterio HubSpot). &nbsp;<span style="color:var(--green)">●</span> bueno &nbsp;<span style="color:var(--yellow)">●</span> atención &nbsp;<span style="color:var(--red)">●</span> bajo
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: EVOLUCIÓN MENSUAL ═══ -->
+<section class="section" id="s-evolution">
+  <div class="section-header">
+    <div class="section-eyebrow">Evolución</div>
+    <h2 class="section-title">Evolución mensual</h2>
+    <p class="section-sub">OR y CTR ponderados por mes. La línea punteada verde es el benchmark calculado con tus propios datos.</p>
+  </div>
+  <div class="card">
+    <div class="chart-wrap" style="height:300px"><canvas id="chart-evolution"></canvas></div>
+  </div>
+  <div id="evolution-bench-note" style="margin-top:8px;font-size:10px;color:rgba(255,255,255,.35);line-height:1.6"></div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: SEGMENTOS ═══ -->
+<section class="section" id="s-segments">
+  <div class="section-header">
+    <div class="section-eyebrow">Segmentos</div>
+    <h2 class="section-title">Comparativa de segmentos</h2>
+    <p class="section-sub">Cada segmento (lista de emails) tiene métricas independientes.</p>
+  </div>
+  <div class="grid-3" id="seg-cards"></div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: SCATTER ═══ -->
+<section class="section" id="s-scatter">
+  <div class="section-header">
+    <div class="section-eyebrow">Volumen vs apertura</div>
+    <h2 class="section-title">Tamaño de base y open rate por email</h2>
+    <p class="section-sub">Un punto por email, color por segmento. La línea punteada es el OR promedio de cada segmento.</p>
+  </div>
+  <div class="card">
+    <div class="chart-wrap" style="height:380px"><canvas id="chart-scatter"></canvas></div>
+    <div class="scatter-legend" id="scatter-legend" style="margin-top:14px;padding-top:12px;border-top:1px solid var(--card-border)"></div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: POR TIPO ═══ -->
+<section class="section" id="s-types">
+  <div class="section-header">
+    <div class="section-eyebrow">Rendimiento por tipo</div>
+    <h2 class="section-title">OR y CTR por tipo de email</h2>
+    <p class="section-sub">OR y CTR ponderados por tipo de email. No compares tipos entre sí: cada uno tiene su propia expectativa de performance.</p>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="label" style="margin-bottom:14px">Open Rate ponderado por tipo</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chart-type-or"></canvas></div>
+    </div>
+    <div class="card">
+      <div class="label" style="margin-bottom:14px">CTR ponderado por tipo</div>
+      <div class="chart-wrap" style="height:260px"><canvas id="chart-type-ctr"></canvas></div>
+    </div>
+  </div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: FRECUENCIA ═══ -->
+<section class="section" id="s-saturation">
+  <div class="section-header">
+    <div class="section-eyebrow">Frecuencia de envío</div>
+    <h2 class="section-title">¿Enviar más afecta el open rate?</h2>
+    <p class="section-sub">Emails enviados por mes y open rate ponderado. Cada segmento se muestra por separado.</p>
+  </div>
+  <div id="saturation-stats" style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px"></div>
+  <div class="card">
+    <div class="chart-wrap" style="height:300px"><canvas id="chart-saturation"></canvas></div>
+  </div>
+  <div id="saturation-note" style="margin-top:10px;font-size:11px;color:rgba(255,255,255,.4);line-height:1.7"></div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: TOP PERFORMERS ═══ -->
+<section class="section" id="s-performers">
+  <div class="section-header">
+    <div class="section-eyebrow">Top performers</div>
+    <h2 class="section-title">Top performers</h2>
+    <p class="section-sub">Rankings separados por segmento. Mass por open rate ponderado (mínimo 1.000 enviados). Small por CTOR (calidad de clic).</p>
+  </div>
+  <div class="grid-3" id="perf-grid"></div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: TABLA COMPLETA ═══ -->
+<section class="section" id="s-table">
+  <div class="section-header">
+    <div class="section-eyebrow">Tabla completa</div>
+    <h2 class="section-title">Todos los emails <span id="table-count" style="font-size:14px;color:var(--gray-300);font-weight:400"></span></h2>
+  </div>
+  <input type="text" class="tbl-search" id="tbl-search" placeholder="Buscar por nombre, asunto o tipo..." oninput="renderTable()"/>
+  <div id="full-table-wrap"><div class="empty-state">Cargando...</div></div>
+</section>
+
+<hr class="sep"/>
+
+<!-- ═══ SECTION: INSIGHTS ═══ -->
+<section class="section" id="s-insights">
+  <div class="section-header">
+    <div class="section-eyebrow">Insights</div>
+    <h2 class="section-title">Insights estratégicos</h2>
+    <p class="section-sub">Basados en los datos reales del período, no en mejores prácticas genéricas.</p>
+  </div>
+  <div id="insights-grid" class="grid-2"></div>
+</section>
+
+</main>
+
+<!-- ═══ METODOLOGÍA DRAWER ═══ -->
+<div id="metodo-overlay" onclick="closeMetodo()"></div>
+<div id="metodo-drawer">
+  <div class="metodo-drawer-header">
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:6px">Cómo se calculan las métricas</div>
+      <h2>Metodología</h2>
+      <p>Fórmulas, definiciones y benchmarks usados en este reporte.</p>
+    </div>
+    <button id="metodo-close" onclick="closeMetodo()">✕</button>
+  </div>
+  <div class="metodo-grid">
+    <div class="card metodo-card">
+      <div class="metodo-name">OR · Open Rate</div>
+      <div class="metodo-formula">aperturas únicas / entregados × 100</div>
+      <div class="metodo-desc">Porcentaje de destinatarios que abrieron el email al menos una vez. <strong>Se calcula sobre entregados</strong>, no sobre enviados (igual que HubSpot).</div>
+      <div class="metodo-bench"><span style="color:var(--green)">●</span> Bueno: ≥25% (masa) · ≥35% (mid) · ≥65% (micro)<br><span style="color:var(--yellow)">●</span> Ok: ≥18% · ≥25% · ≥45%</div>
+    </div>
+    <div class="card metodo-card">
+      <div class="metodo-name">CTR · Click-Through Rate</div>
+      <div class="metodo-formula">clics únicos / entregados × 100</div>
+      <div class="metodo-desc">Porcentaje de destinatarios que hicieron clic en algún link. Mide la efectividad del CTA sobre toda la base entregada.</div>
+      <div class="metodo-bench"><span style="color:var(--green)">●</span> Bueno: ≥1.2% (masa) · ≥8% (mid) · ≥15% (micro)<br><span style="color:var(--yellow)">●</span> Ok: ≥0.6% · ≥3% · ≥8%</div>
+    </div>
+    <div class="card metodo-card">
+      <div class="metodo-name">CTOR · Click-to-Open Rate</div>
+      <div class="metodo-formula">clics únicos / aperturas únicas × 100</div>
+      <div class="metodo-desc">De quienes abrieron, cuántos hicieron clic. Mide la calidad del contenido independientemente del tamaño del envío.</div>
+      <div class="metodo-bench"><span style="color:var(--green)">●</span> Bueno: ≥8% &nbsp;·&nbsp; <span style="color:var(--yellow)">●</span> Ok: ≥4%</div>
+    </div>
+    <div class="card metodo-card">
+      <div class="metodo-name">DR · Delivery Rate</div>
+      <div class="metodo-formula">entregados / enviados × 100</div>
+      <div class="metodo-desc">Porcentaje de emails que llegaron sin rebotar. Un DR bajo indica problemas de higiene de base o reputación de dominio.</div>
+      <div class="metodo-bench"><span style="color:var(--green)">●</span> Bueno: ≥99% &nbsp;·&nbsp; <span style="color:var(--yellow)">●</span> Ok: ≥97% &nbsp;·&nbsp; <span style="color:var(--red)">●</span> Revisar: &lt;97%</div>
+    </div>
+    <div class="card metodo-card">
+      <div class="metodo-name">Tasa de rebote</div>
+      <div class="metodo-formula">(enviados − entregados) / enviados × 100</div>
+      <div class="metodo-desc">Inverso del DR. Incluye rebotes duros (dirección inexistente) y blandos (buzón lleno). HubSpot reporta el campo Rebotes como dato directo.</div>
+      <div class="metodo-bench"><span style="color:var(--green)">●</span> Bueno: ≤0.5% &nbsp;·&nbsp; <span style="color:var(--yellow)">●</span> Ok: ≤1% &nbsp;·&nbsp; <span style="color:var(--red)">●</span> Revisar: &gt;1%</div>
+    </div>
+    <div class="card metodo-card">
+      <div class="metodo-name">Frecuencia</div>
+      <div class="metodo-formula">emails del período / meses únicos</div>
+      <div class="metodo-desc">Promedio de envíos por mes. Detecta sobre-comunicación (fatiga) o sub-comunicación (pérdida de awareness).</div>
+      <div class="metodo-bench">Referencia: 2–4 envíos/mes es saludable para la mayoría de las bases.</div>
+    </div>
+  </div>
+  <div style="margin-top:20px;padding:18px 22px;background:rgba(94,207,255,.05);border:1px solid rgba(94,207,255,.18);border-radius:12px;line-height:1.7">
+    <div style="font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);margin-bottom:10px">¿Qué significa "ponderada"?</div>
+    <p style="font-size:12px;color:rgba(255,255,255,.7);margin-bottom:12px">Las tasas (OR, CTR, CTOR) se calculan sumando primero todos los eventos y dividiendo al final — no promediando las tasas de cada email por separado.</p>
+    <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:center">
+      <div style="background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:10px 14px;font-size:11px;color:rgba(255,255,255,.5)">
+        <div style="font-weight:700;color:var(--red);margin-bottom:4px">✗ Promedio simple</div>
+        Email A: 1.000 env · OR 30%<br>Email B: 100 env · OR 50%<br>
+        <span style="color:rgba(255,255,255,.35)">(30 + 50) / 2 =</span> <strong style="color:var(--red)">40%</strong>
+        <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:4px">Trata igual ambos aunque uno envió 10× más</div>
+      </div>
+      <div style="font-size:18px;color:rgba(255,255,255,.2);text-align:center">→</div>
+      <div style="background:rgba(0,89,213,.12);border:1px solid rgba(0,89,213,.3);border-radius:8px;padding:10px 14px;font-size:11px;color:rgba(255,255,255,.5)">
+        <div style="font-weight:700;color:var(--green);margin-bottom:4px">✓ Ponderada (este reporte)</div>
+        (300 + 50) aperturas<br>÷ (1.000 + 100) enviados<br>
+        <span style="color:rgba(255,255,255,.35)">350 / 1.100 =</span> <strong style="color:var(--green)">31.8%</strong>
+        <div style="font-size:10px;color:rgba(255,255,255,.3);margin-top:4px">El email grande pesa más, refleja la realidad</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+// ═══════════════════════════════════════════════════════
+// SHEET — URL CSV pública de la Google Sheet de Partner Marketing
+// Para publicar: Archivo → Compartir → Publicar en la web → CSV
+// ═══════════════════════════════════════════════════════
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vTIfuXrmLu6JHSbEjvj1RjYx7xtcqTSqbOvq-CgK52oC3P2k92V3Q3t1_YRwSyWabVqMb2RStYvZLZV/pub?output=csv&gid=1635204810';
+
+// ═══════════════════════════════════════════════════════
+// DATA — seed de respaldo (77 registros); se sobreescribe al sincronizar con Google Sheets
+// ═══════════════════════════════════════════════════════
+const SEED_DATA = [
+{"n":"[Agencies AR] Nurturing | Partner Program - Email 6 (Clon)","a":"Todo listo para el nuevo Programa de Partners ⏳","f":"2026-04-28","by":"Daniela Pereyra","env":5652,"ent":5641,"ab":902,"cl":29,"br":0.195,"hour":9},
+{"n":"[Agencies AR] Newsletter Abril","a":"Edición Abril: Conocé a tu nuevo consultor de IA para Hot Sale 🤖","f":"2026-04-27","by":"Daniela Pereyra","env":6005,"ent":5996,"ab":1004,"cl":28,"br":0.15,"hour":13},
+{"n":"[Agencias AR] Sponsoreos 2026 | Entrenamiento Nube","a":"✨Tu agencia puede ser parte de Entrenamiento Nube","f":"2026-04-27","by":"Candela Caamaño","env":5894,"ent":5881,"ab":908,"cl":34,"br":0.221,"hour":12},
+{"n":"[Agencies AR] Sesión Marketing Nube presencial - MAIL 2","a":"📆 Invitación: Business Session presencial","f":"2026-04-27","by":"Daniela Pereyra","env":31,"ent":31,"ab":11,"cl":3,"br":0.0,"hour":9},
+{"n":"[Agencies AR] Sesión Marketing Nube online - POST EVENTO 2","a":"💙 ¡Gracias por ser parte!","f":"2026-04-24","by":"Daniela Pereyra","env":5,"ent":5,"ab":1,"cl":1,"br":0.0,"hour":12},
+{"n":"[Agencies AR] Sesión Marketing Nube online - POST EVENTO","a":"💙 ¡Gracias por ser parte!","f":"2026-04-22","by":"Daniela Pereyra","env":26,"ent":26,"ab":17,"cl":6,"br":0.0,"hour":13},
+{"n":"[Agencies AR] Sesión Marketing Nube online - DÍA D","a":"📽️ Estamos por comenzar el vivo","f":"2026-04-22","by":"Daniela Pereyra","env":16,"ent":16,"ab":9,"cl":5,"br":0.0,"hour":10},
+{"n":"[Agencies AR] Nurturing | Partner Program - Email 5 (Clon)","a":"📈 Ganá más proyectos con el nuevo Kit Comercial 2026","f":"2026-04-21","by":"Daniela Pereyra","env":5903,"ent":5886,"ab":962,"cl":34,"br":0.288,"hour":9},
+{"n":"[Agencies AR] Sesión Marketing Nube online - (-1D)","a":"📽️ MAÑANA: Sesión en vivo","f":"2026-04-21","by":"Daniela Pereyra","env":16,"ent":16,"ab":7,"cl":1,"br":0.0,"hour":9},
+{"n":"[Agencias AR] Sponsoreos 2026 | D2C Summit","a":"✨Sé parte del D2C Summit con tu agencia","f":"2026-04-20","by":"Candela Caamaño","env":6022,"ent":6004,"ab":993,"cl":25,"br":0.299,"hour":12},
+{"n":"[Agencies AR] Sesión Marketing Nube presencial - MAIL 1 nueva fecha","a":"📆 Invitación: Business Session presencial","f":"2026-04-20","by":"Daniela Pereyra","env":31,"ent":31,"ab":15,"cl":0,"br":0.0,"hour":9},
+{"n":"[Agencies AR] Sesión Marketing Nube online - MAIL 5","a":"⏰ 48hs para encontrarnos: solo agencias líderes","f":"2026-04-20","by":"Daniela Pereyra","env":27,"ent":27,"ab":13,"cl":1,"br":0.0,"hour":9},
+{"n":"[Agencies AR] Sesión Marketing Nube online - MAIL 4","a":"Ayudanos a evolucionar Marketing Nube 🛠️","f":"2026-04-17","by":"Daniela Pereyra","env":31,"ent":31,"ab":9,"cl":1,"br":0.0,"hour":10},
+{"n":"[Agencies AR] Sesión Marketing Nube online - MAIL 3","a":"Workshop: cómo subir el MAAV de tus clientes (+20%) 📈","f":"2026-04-16","by":"Daniela Pereyra","env":28,"ent":28,"ab":14,"cl":2,"br":0.0,"hour":10},
+{"n":"[Agencies AR] N3RDI x TIENDANUBE","a":"🗓️Invitación: evento presencial y gratuito con N3RDI","f":"2026-04-16","by":"Daniela Pereyra","env":29,"ent":29,"ab":5,"cl":1,"br":0.0,"hour":8},
+{"n":"[Agencias AR] FLUJO COMISIONES V2","a":"📢 Nuevo flujo para cobrar Comisiones","f":"2026-04-14","by":"Daniela Pereyra","env":6085,"ent":6066,"ab":2889,"cl":68,"br":0.312,"hour":11},
+{"n":"[Agencies AR] Sesión Marketing Nube online - MAIL 2","a":"📆¿Tu agencia está lista para lo que viene en 2026?","f":"2026-04-14","by":"Daniela Pereyra","env":31,"ent":31,"ab":17,"cl":2,"br":0.0,"hour":10},
+{"n":"[Agencias AR] Sponsoreos 2026 | Tecnomoda II","a":"✨Sé parte de Tecnomoda 2026 con tu agencia","f":"2026-04-14","by":"Candela Caamaño","env":6283,"ent":6262,"ab":994,"cl":46,"br":0.334,"hour":9},
+{"n":"[Agencias AR] New Partner Program - Webinar Post","a":"🔥 Nuevo Partner Program: lo que viene en el ecosistema","f":"2026-04-13","by":"Candela Caamaño","env":6421,"ent":6390,"ab":1015,"cl":66,"br":0.483,"hour":15},
+{"n":"[Agencias AR] New Partner Program - Webinar Reminder día D","a":"📽️¡Ya casi empezamos!","f":"2026-04-10","by":"Daniela Pereyra","env":145,"ent":145,"ab":74,"cl":36,"br":0.0,"hour":9},
+{"n":"[Agencias AR] Sponsoreos 2026: webinars","a":"📢Oportunidad única para tu Agencia: Sponsoreos 2026","f":"2026-04-09","by":"Daniela Pereyra","env":6615,"ent":6587,"ab":983,"cl":42,"br":0.423,"hour":11},
+{"n":"[Agencies AR] Nurturing | Partner Program - Email 7 (Clon)","a":"¡Ya es oficial! 🚀 Activamos el nuevo Partner Program","f":"2026-05-05","by":"Daniela Pereyra","env":0,"ent":0,"ab":0,"cl":0,"br":0.0,"hour":9},
+{"n":"[Agencias AR] New Partner Program - Webinar Reminder 2","a":"📅 24hs para nuestra sesión en vivo","f":"2026-04-09","by":"Candela Caamaño","env":6745,"ent":6713,"ab":1159,"cl":35,"br":0.474,"hour":8},
+{"n":"[Agencies AR] Sesión Marketing Nube presencial - MAIL 1","a":"📆 Invitación: Business Session en nuestras oficinas","f":"2026-04-08","by":"Daniela Pereyra","env":33,"ent":33,"ab":18,"cl":6,"br":0.0,"hour":15},
+{"n":"[Agencies AR] Sesión Marketing Nube online - MAIL 1","a":"📆Invitación exclusiva: Círculo de expertos Marketing Nube","f":"2026-04-08","by":"Daniela Pereyra","env":33,"ent":33,"ab":16,"cl":10,"br":0.0,"hour":11},
+{"n":"[Agencies AR] Encuesta de product updates","a":"⏱️ 3 minutos para mejorar tu experiencia","f":"2026-04-07","by":"Daniela Pereyra","env":6799,"ent":6763,"ab":1062,"cl":33,"br":0.529,"hour":15},
+{"n":"[Agencies AR] Actualización de datos comisiones","a":"💰 Comisiones: mantené al día tus datos de cobro","f":"2026-03-30","by":"Daniela Pereyra","env":7115,"ent":7091,"ab":2867,"cl":142,"br":0.337,"hour":14},
+{"n":"[KO Agencias] Post evento - Feedback reminder","a":"👀 ¿Qué te pareció el Kick-off Agencias?","f":"2026-03-25","by":"Daniela Pereyra","env":135,"ent":135,"ab":69,"cl":32,"br":0.0,"hour":11},
+{"n":"[KO Agencias] Post evento - Partners Asistentes","a":"Roadmap 2026: Reviví el Kick-off Agencias 🚀","f":"2026-03-19","by":"Daniela Pereyra","env":135,"ent":135,"ab":82,"cl":67,"br":0.0,"hour":10},
+{"n":"[KO Agencias] Reminder day of","a":"📢¡Es hoy! Te esperamos en el Kick-off Agencias 2026","f":"2026-03-18","by":"Daniela Pereyra","env":162,"ent":161,"ab":121,"cl":18,"br":0.617,"hour":8},
+{"n":"[KO Agencias] Reminder -1D","a":"📢Mañana nos vemos: Recordatorio final","f":"2026-03-17","by":"Daniela Pereyra","env":161,"ent":159,"ab":109,"cl":14,"br":1.242,"hour":9},
+{"n":"[KO Agencias] Reminder -2D","a":"📆 ¡48 horas para el encuentro de líderes de la industria!","f":"2026-03-16","by":"Daniela Pereyra","env":160,"ent":159,"ab":73,"cl":10,"br":0.625,"hour":15},
+{"n":"[Agencies AR] Descontinuación sello agencia certificada | 13/3","a":"⚠️ Actualización importante sobre tu sello de Agencia Certificada","f":"2026-03-13","by":"Daniela Pereyra","env":144,"ent":144,"ab":93,"cl":0,"br":0.0,"hour":9},
+{"n":"Confirmacion 12/03 - KO Agencias corte 4","a":"⚡¡Asistencia confirmada! Kick-off Agencias | Evento Tiendanube","f":"2026-03-12","by":"Daniela Pereyra","env":15,"ent":15,"ab":9,"cl":2,"br":0.0,"hour":14},
+{"n":"Recordatorio -1 semana | KO Agencias","a":"⏳ 7 días para el encuentro de líderes de la industria","f":"2026-03-11","by":"Daniela Pereyra","env":145,"ent":143,"ab":88,"cl":7,"br":1.379,"hour":15},
+{"n":"Confirmacion 11/03 - KO Agencias corte 3","a":"⚡¡Asistencia confirmada! Kick-off Agencias | Evento Tiendanube","f":"2026-03-11","by":"Daniela Pereyra","env":8,"ent":8,"ab":6,"cl":0,"br":0.0,"hour":14},
+{"n":"Confirmacion 10/03 - KO Agencias corte 2","a":"⚡¡Asistencia confirmada! Kick-off Agencias | Evento Tiendanube","f":"2026-03-10","by":"Daniela Pereyra","env":29,"ent":29,"ab":18,"cl":3,"br":0.0,"hour":14},
+{"n":"[Agencias] Invitación agency KO LISTA C Partners","a":"📢 Invitación exclusiva: encuentro de agencias | Tiendanube","f":"2026-03-09","by":"Daniela Pereyra","env":16,"ent":16,"ab":7,"cl":4,"br":0.0,"hour":15},
+{"n":"[Agencias] Invitación agency KO PUSH NO REGISTRADOS 9/3","a":"🔑 Tu invitación exclusiva: encuentro de agencias líderes","f":"2026-03-09","by":"Daniela Pereyra","env":87,"ent":87,"ab":31,"cl":7,"br":0.0,"hour":14},
+{"n":"Confirmacion 09/03 - KO Agencias corte 1","a":"⚡¡Asistencia confirmada! Kick-off Agencias | Evento Tiendanube","f":"2026-03-09","by":"Daniela Pereyra","env":110,"ent":108,"ab":76,"cl":14,"br":1.818,"hour":12},
+{"n":"[Agencias] Invitación agency KO PUSH NO REGISTRADOS 6/3","a":"📢 [Últimos cupos] Encuentro de agencias | Tiendanube","f":"2026-03-06","by":"Daniela Pereyra","env":89,"ent":89,"ab":36,"cl":9,"br":0.0,"hour":16},
+{"n":"[Agencias] Invitación agency KO LISTA B Partners","a":"📢 Invitación exclusiva: encuentro de agencias | Tiendanube","f":"2026-03-05","by":"Daniela Pereyra","env":32,"ent":32,"ab":10,"cl":4,"br":0.0,"hour":15},
+{"n":"[Agencias] Invitación agency KO PROSPECTS | follow-up","a":"[Invitación] Encuentro de líderes de agencias | Tiendanube","f":"2026-03-02","by":"Daniela Pereyra","env":27,"ent":27,"ab":13,"cl":4,"br":0.0,"hour":9},
+{"n":"[Agencias] Invitación agency KO PARTNERS | follow up","a":"🔑Tu lugar exclusivo: encuentro de agencias líderes","f":"2026-02-27","by":"Daniela Pereyra","env":104,"ent":104,"ab":50,"cl":16,"br":0.0,"hour":15},
+{"n":"[Agencias] Newsletter Febrero","a":"📈 NubeCommerce 2026: Tu acceso anticipado","f":"2026-02-25","by":"Daniela Pereyra","env":6218,"ent":6202,"ab":2434,"cl":94,"br":0.257,"hour":9},
+{"n":"[Agencias] Invitación agency KO | PROSPECTS","a":"📢Invitación exclusiva: Agency Kick-off 2026 [Evento Presencial]","f":"2026-02-24","by":"Daniela Pereyra","env":31,"ent":31,"ab":17,"cl":8,"br":0.0,"hour":16},
+{"n":"[Agencias] Invitación agency KO | PARTNERS","a":"📢Invitación exclusiva: Agency Kick-off 2026 [Evento Presencial]","f":"2026-02-24","by":"Daniela Pereyra","env":102,"ent":102,"ab":50,"cl":20,"br":0.0,"hour":16},
+{"n":"[B&C AR | Agencias] Invitación pocket event con We Are | MAR","a":"📍Invitación exclusiva: Brunch de negocios | Líderes de e-commerce","f":"2026-02-20","by":"Daniela Pereyra","env":60,"ent":59,"ab":23,"cl":2,"br":1.667,"hour":10},
+{"n":"[Agencias] Comm ventas B2B","a":"🛒 B2B en Tiendanube: la funcionalidad que tus clientes estaban esperando","f":"2026-02-13","by":"Daniela Pereyra","env":6133,"ent":6110,"ab":1147,"cl":12,"br":0.375,"hour":11},
+{"n":"[Agencias] Comm chat nube PA","a":"📢 Convertite en experto: Así podés dominar Chat Nube","f":"2026-02-11","by":"Daniela Pereyra","env":6221,"ent":6202,"ab":1646,"cl":25,"br":0.305,"hour":16},
+{"n":"[Agencias] Newsletter Enero","a":"🔥Nuevas oportunidades para hacer crecer tu agencia","f":"2026-01-31","by":"Daniela Pereyra","env":6107,"ent":6094,"ab":1213,"cl":42,"br":0.213,"hour":13},
+{"n":"[B&C AR/AGENCIAS] Webinar panel de partners (Clon)","a":"📢 ÚLTIMOS CUPOS: Sesión en vivo con Tiendanube","f":"2026-01-21","by":"Daniela Pereyra","env":5842,"ent":5826,"ab":1121,"cl":42,"br":0.274,"hour":17},
+{"n":"[B&C AR/AGENCIAS] Webinar panel de partners","a":"📢 Novedades en tu Panel de Partner [EN VIVO]","f":"2026-01-19","by":"Daniela Pereyra","env":6187,"ent":6166,"ab":1201,"cl":51,"br":0.339,"hour":12},
+{"n":"[Agencias / B&C AR] Comunicación directorio especialistas","a":"📢 Actualización en tu Perfil de Especialista","f":"2026-01-07","by":"Daniela Pereyra","env":298,"ent":294,"ab":104,"cl":2,"br":1.342,"hour":11},
+{"n":"[Agencias] Fin de año |","a":"3 novedades para cerrar el año con Tiendanube 🚀","f":"2025-12-22","by":"Daniela Pereyra","env":6186,"ent":6168,"ab":1106,"cl":66,"br":0.291,"hour":15},
+{"n":"Aviso pago de comisiones diciembre - affiliates y agencias","a":"🕒 Aviso importante: Pago de comisiones durante diciembre","f":"2025-12-06","by":"Daniela Pereyra","env":7276,"ent":7254,"ab":3675,"cl":7,"br":0.302,"hour":12},
+{"n":"[Agencias] Newsletter Innova | DICIEMBRE","a":"Partner, ¡conocé nuestros +100 lanzamientos! 🚀","f":"2025-12-05","by":"Daniela Pereyra","env":6503,"ent":6487,"ab":1122,"cl":63,"br":0.246,"hour":11},
+{"n":"Mejores diseños Tiendanube 2025 | Agencias AR [B&C AR]","a":"🎨 ¡Queremos destacar tus mejores diseños!","f":"2025-12-01","by":"Daniela Pereyra","env":6636,"ent":6618,"ab":1319,"cl":31,"br":0.271,"hour":10},
+{"n":"Comunidad de partners wpp | FOMO [B&C AR]","a":"Ya somos +200 partners conectados… ¿y vos? 👀","f":"2025-11-22","by":"Daniela Pereyra","env":6646,"ent":6620,"ab":1271,"cl":97,"br":0.391,"hour":10},
+{"n":"[Agencias] Newsletter Noviembre - Innova2026","a":"🚀+100 lanzamientos que van a transformar el e-commerce [EXCLUSIVO]","f":"2025-11-19","by":"Daniela Pereyra","env":6414,"ent":6375,"ab":1298,"cl":84,"br":0.608,"hour":14},
+{"n":"[B&C AR] Invitación InnovA agencias partners","a":"📍Invitación exclusiva: conocé antes que nadie las novedades de Tiendanube 2026","f":"2025-11-12","by":"Daniela Pereyra","env":45,"ent":45,"ab":29,"cl":22,"br":0.0,"hour":14},
+{"n":"Newsletter sept-oct AGENCIAS PARTNERS AR","a":"Todo lo que necesitás para este CyberMonday en Tiendanube 🚀 #PartnersNewsletter","f":"2025-10-31","by":"Daniela Pereyra","env":6772,"ent":6746,"ab":1485,"cl":70,"br":0.384,"hour":12},
+{"n":"[Partners AR] Recordatorio mantenimiento programado","a":"⚠️ Mantenimiento programado: Información importante para tu agencia","f":"2025-10-17","by":"Daniela Pereyra","env":4482,"ent":4467,"ab":1904,"cl":24,"br":0.335,"hour":10},
+{"n":"Comm partners sep #2| webinar mkt nube","a":"⚡Automatizaciones que tu agencia necesita dominar","f":"2025-09-26","by":"Daniela Pereyra","env":6790,"ent":6773,"ab":1343,"cl":54,"br":0.25,"hour":12},
+{"n":"Comm partners sep #1| webinar mkt nube","a":"😎 Así podés aumentar la facturación de tus clientes con Tiendanube","f":"2025-09-24","by":"Daniela Pereyra","env":6454,"ent":6433,"ab":1244,"cl":72,"br":0.325,"hour":9},
+{"n":"Newsletter Partners Agosto","a":"Todo lo que pasó en agosto en Tiendanube 🚀","f":"2025-08-29","by":"Daniela Pereyra","env":7512,"ent":7482,"ab":1244,"cl":24,"br":0.399,"hour":11},
+{"n":"Ent Nube rosario - agencias mkt nube","a":"🚀 ¡Invitación especial para tu agencia!","f":"2025-08-26","by":"Daniela Pereyra","env":8,"ent":8,"ab":4,"cl":1,"br":0.0,"hour":9},
+{"n":"Post encuesta feedback - Toolkit de Apps Partners","a":"💌 ¡Recurso de regalo!","f":"2025-08-25","by":"Daniela Pereyra","env":16,"ent":16,"ab":12,"cl":10,"br":0.0,"hour":14},
+{"n":"Comm partners agosto #3 | webinar apps","a":"💌 ¿Tu agencia ya reservó su lugar?","f":"2025-08-23","by":"Daniela Pereyra","env":7908,"ent":7868,"ab":1440,"cl":111,"br":0.506,"hour":11},
+{"n":"Comm partners agosto #2 | webinar apps","a":"🔐El secreto de las agencias que venden más","f":"2025-08-21","by":"Daniela Pereyra","env":8086,"ent":8050,"ab":1307,"cl":48,"br":0.445,"hour":10},
+{"n":"Comm partners agosto | webinar apps","a":"🏆 Tu próxima ventaja competitiva está en estas apps","f":"2025-08-19","by":"Daniela Pereyra","env":8345,"ent":8299,"ab":1466,"cl":52,"br":0.551,"hour":10},
+{"n":"Newsletter partners JULIO","a":"👀 Esto pasó en Julio en Tiendanube","f":"2025-07-30","by":"Daniela Pereyra","env":8068,"ent":8020,"ab":1485,"cl":74,"br":0.595,"hour":15},
+{"n":"Partners Live Sessions JUL Invite","a":"📈 Invitación: Construí una propuesta de valor que te ayude a cerrar más ventas","f":"2025-07-16","by":"Daniela Pereyra","env":7800,"ent":7751,"ab":1468,"cl":72,"br":0.628,"hour":11},
+{"n":"Desafío lider de ventas | comm #3 partners AR (Webinar Julio)","a":"📽️ [Webinar] Potenciá las ventas de tu agencia con Tiendanube","f":"2025-07-10","by":"Daniela Pereyra","env":8317,"ent":8266,"ab":1522,"cl":70,"br":0.613,"hour":16},
+{"n":"Desafío lider de ventas | comm #2 partners AR","a":"🏁 Desafío activo: empezá a sumar puntos desde hoy","f":"2025-07-03","by":"Daniela Pereyra","env":8303,"ent":8258,"ab":1615,"cl":59,"br":0.542,"hour":16},
+{"n":"Desafío lider de ventas | comm #1 partners AR","a":"⏳ Este jueves: evento clave para agencias partners","f":"2025-06-30","by":"Daniela Pereyra","env":14102,"ent":13954,"ab":1576,"cl":130,"br":1.049,"hour":13},
+{"n":"Lanzamientos para partners AR","a":"Partner, estabas esperando estos lanzamientos 💙🔥","f":"2025-06-05","by":"Daniela Pereyra","env":8416,"ent":8362,"ab":1941,"cl":220,"br":0.642,"hour":0},
+{"n":"PRODUCT RELEASE | Comm partners","a":"Lanzamientos Tiendanube: ¡menos de una semana!","f":"2024-04-23","by":"Daniela Pereyra","env":858,"ent":853,"ab":335,"cl":25,"br":0.583,"hour":16}
+];
+
+// ═══ TYPE DETECTION ═══
+function detectType(n, a) {
+  const t = ((n||'') + ' ' + (a||'')).toLowerCase();
+  if (/newsletter/i.test(t)) return 'Newsletter';
+  if (/comisi[oó]n|aviso.*pago|pago.*comis|actualiz.*datos.*comis|descontinua|sello.*agencia|mantenimiento|directorio especialistas|confirmaci[oó]n\s+\d|post.*evento.*gracias/i.test(t)) return 'Operativo';
+  if (/encuesta|feedback.*reminder|qu[eé] te pareci/i.test(t)) return 'Feedback';
+  if (/desaf[ií]o.*l[íi]der|fomo|comunidad.*wpp|sponsore[oó]/i.test(t)) return 'Engagement';
+  if (/webinar|sesi[oó]n.*nube|kick.?off|presencial|entrenamiento nube|summit|d2c|invitaci[oó]n.*agencia|invitaci[oó]n.*partner|invita.*exclusiva|recordatorio|reminder|mañana.*vivo|ya casi empezamos|es hoy|d[ií]a d\b|live session|innova.*agencias|n3rdi/i.test(t)) return 'Event Invitation or Reminder';
+  if (/nurturing|lanzamiento|release|chat nube|b2b|flujo.*comis|kit comercial|roadmap|post.*evento.*asistentes|comm.*ventas|comm.*chat/i.test(t)) return 'Enablement';
+  return 'Other';
+}
+
+// ═══ COMPUTED FIELDS ═══
+function enrich(d) {
+  return d.map(e => ({
+    ...e,
+    or:   e.ent > 0 ? +(e.ab  / e.ent * 100).toFixed(2) : 0,   // sobre entregados = HubSpot
+    ctr:  e.ent > 0 ? +(e.cl  / e.ent * 100).toFixed(2) : 0,   // sobre entregados
+    ctor: e.ab  > 0 ? +(e.cl  / e.ab  * 100).toFixed(2) : 0,
+    dr:   e.env > 0 ? +(e.ent / e.env * 100).toFixed(2) : 0,
+    br: e.br !== undefined ? +e.br : (e.env > 0 ? +((e.env - e.ent) / e.env * 100).toFixed(3) : 0),
+    hour: e.hour !== undefined ? +e.hour : null,
+    tp: e.tp || detectType(e.n, e.a),
+    seg: e.env > 1000 ? 'mass' : e.env >= 100 ? 'mid' : 'small',
+    ym: e.f.slice(0, 7)
+  }));
+}
+
+// ═══ STATE ═══
+let DATA = [];
+let activeSeg = 'all';
+let selectedMonths = new Set(); // empty = todo el período
+const charts = {};
+
+function getStoredData() {
+  try {
+    const s = localStorage.getItem('partners_email_data_v3');
+    return s ? JSON.parse(s) : null;
+  } catch { return null; }
+}
+function saveData(d) {
+  try { localStorage.setItem('partners_email_data_v3', JSON.stringify(d)); } catch {}
+}
+
+// ═══ TOOLTIP ENGINE ═══
+const TT_CONTENT = {
+  emails:   `<strong>Emails</strong>Campañas del período. Excluye envíos de prueba.`,
+  enviados: `<strong>Enviados</strong><code>Σ env</code>Total de contactos destinatarios. El subtexto muestra entregados y DR.`,
+  aperturas:`<strong>Aperturas únicas</strong><code>Σ ab</code>Primera apertura por contacto por email.`,
+  clics:    `<strong>Clics únicos</strong><code>Σ cl</code>Primer clic por contacto por email en cualquier link.`,
+  or:       `<strong>Open Rate</strong><code>aperturas / entregados × 100</code>Calculado sobre entregados, igual que HubSpot.`,
+  ctr:      `<strong>Click-Through Rate</strong><code>clics / entregados × 100</code>Alcance del CTA sobre toda la base entregada.`,
+  ctor:     `<strong>Click-to-Open Rate</strong><code>clics / aperturas × 100</code>Calidad del contenido entre quienes abrieron.`,
+  br:       `<strong>Tasa de rebote</strong><code>(env − ent) / env × 100</code>Incluye rebotes duros y blandos. >1% requiere revisión.`,
+};
+(function initTooltips() {
+  const box = document.getElementById('tt-global');
+  let hideTimer;
+  document.addEventListener('mouseover', e => {
+    const icon = e.target.closest('[data-tt]');
+    if (!icon) return;
+    clearTimeout(hideTimer);
+    const key = icon.dataset.tt;
+    box.innerHTML = TT_CONTENT[key] || '';
+    const r = icon.getBoundingClientRect();
+    box.style.display = 'block';
+    const bw = box.offsetWidth, bh = box.offsetHeight;
+    let left = r.left + r.width / 2 - bw / 2;
+    let top  = r.top - bh - 8;
+    // keep within viewport
+    left = Math.max(8, Math.min(left, window.innerWidth - bw - 8));
+    if (top < 8) top = r.bottom + 8;
+    box.style.left = left + 'px';
+    box.style.top  = top  + 'px';
+    box.classList.add('visible');
+  });
+  document.addEventListener('mouseout', e => {
+    const icon = e.target.closest('[data-tt]');
+    if (!icon) return;
+    hideTimer = setTimeout(() => {
+      box.classList.remove('visible');
+      setTimeout(() => { box.style.display = 'none'; }, 120);
+    }, 80);
+  });
+})();
+
+// ── Sheet status indicator ──
+function setSheetStatus(state, date) {
+  const el = document.getElementById('sheet-status');
+  if (!el) return;
+  if (state === 'loading') {
+    el.className = 'sheet-status loading';
+    el.innerHTML = '⏳ Cargando datos...';
+  } else if (state === 'ok') {
+    const fmt = date
+      ? date.toLocaleDateString('es-AR', { day:'numeric', month:'short', hour:'2-digit', minute:'2-digit' })
+      : '';
+    el.className = 'sheet-status ok';
+    el.innerHTML = `✅ En vivo · ${fmt}`;
+    el.title = 'Datos cargados desde Google Sheets';
+  } else {
+    el.className = 'sheet-status error';
+    el.innerHTML = '⚠️ Sin conexión · datos locales';
+    el.title = 'No se pudo conectar con Google Sheets. Se usan los datos guardados localmente.';
+  }
+}
+
+// ── Auto-init: fetch live from sheet, fallback to SEED_DATA ──
+async function initData() {
+  setSheetStatus('loading');
+  try {
+    const r = await fetch(SHEET_URL);
+    if (!r.ok) throw new Error('HTTP ' + r.status);
+    const csv = await r.text();
+    const parsed = parseHubSpotCSV(csv);
+    if (!parsed.length) throw new Error('sin filas válidas');
+    DATA = enrich(parsed.filter(e => e.f));
+    setSheetStatus('ok', new Date());
+    return;
+  } catch (e) {
+    console.warn('[Sheet] Auto-fetch falló:', e.message, '— usando SEED_DATA');
+    setSheetStatus('error');
+  }
+  const stored = getStoredData();
+  DATA = enrich((stored || SEED_DATA).filter(e => e.f));
+}
+
+// ── fetchGSheet: usado por el modal de importación ──
+function sheetEditToCsv(url) {
+  const match = url.match(/\/d\/([a-zA-Z0-9_-]+)/);
+  const gidMatch = url.match(/[?&#]gid=(\d+)/);
+  if (!match) return url; // ya es CSV o URL directa
+  return `https://docs.google.com/spreadsheets/d/${match[1]}/pub?output=csv&gid=${gidMatch ? gidMatch[1] : '0'}`;
+}
+
+function fetchGSheet(rawUrl) {
+  const csvUrl = sheetEditToCsv(rawUrl);
+  fetch(csvUrl)
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); })
+    .then(csv => {
+      const parsed = parseHubSpotCSV(csv);
+      if (!parsed.length) throw new Error('No se encontraron filas válidas. Verificá el formato.');
+      const base = parsed.map(e => {
+        const o = { n:e.n, a:e.a, f:e.f, by:e.by, env:e.env, ent:e.ent, ab:e.ab, cl:e.cl };
+        if (e.hour != null) o.hour = e.hour;
+        if (e.br  != null) o.br   = e.br;
+        return o;
+      });
+      DATA = enrich(base.filter(e => e.f));
+      saveData(base);
+      setSheetStatus('ok', new Date());
+      buildPeriodSelector();
+      renderAll();
+      closeImport();
+    })
+    .catch(err => {
+      document.getElementById('import-status').textContent =
+        '❌ ' + err.message + '. Verificá que la sheet esté publicada (Archivo → Compartir → Publicar en la web → CSV).';
+    });
+}
+
+function filtered() {
+  let d = DATA;
+  if (activeSeg !== 'all') d = d.filter(e => e.seg === activeSeg);
+  if (selectedMonths.size > 0) d = d.filter(e => selectedMonths.has(e.ym));
+  return d;
+}
+
+function filteredNoSeg() {
+  let d = DATA;
+  if (selectedMonths.size > 0) d = d.filter(e => selectedMonths.has(e.ym));
+  return d;
+}
+
+// ═══ METRICS ═══
+function wMetrics(rows) {
+  if (!rows.length) return { or: 0, ctr: 0, ctor: 0, dr: 0, br: 0, total: 0, deliv: 0, count: 0, opens: 0, clicks: 0, bounces: 0, freq: 0 };
+  const total   = rows.reduce((s, e) => s + e.env, 0);
+  const deliv   = rows.reduce((s, e) => s + e.ent, 0);
+  const opens   = rows.reduce((s, e) => s + e.ab,  0);
+  const clicks  = rows.reduce((s, e) => s + e.cl,  0);
+  const bounces = total - deliv;
+  // Frecuencia: emails / meses únicos en el período
+  const months  = new Set(rows.map(e => e.ym)).size || 1;
+  const freq    = +(rows.length / months).toFixed(1);
+  return {
+    or:   deliv ? +(opens  / deliv * 100).toFixed(2) : 0,
+    ctr:  deliv ? +(clicks / deliv * 100).toFixed(2) : 0,
+    ctor: opens ? +(clicks / opens * 100).toFixed(2) : 0,
+    dr:   total ? +(deliv  / total * 100).toFixed(2) : 0,
+    br:   total ? +(bounces / total * 100).toFixed(2) : 0,
+    total, deliv, bounces, count: rows.length, opens, clicks, freq
+  };
+}
+
+// ═══ STATUS ═══
+function segStatus(val, metric, seg) {
+  const thresholds = {
+    or: { mass: [25, 18], mid: [50, 35], small: [65, 45], all: [25, 18] },
+    ctr: { mass: [1.2, 0.6], mid: [8, 3], small: [15, 8], all: [1.5, 0.7] },
+    ctor: { all: [8, 4] },
+    dr: { all: [99.5, 98] }
+  };
+  const t = (thresholds[metric] || {})[seg] || thresholds[metric]?.all || [50, 25];
+  if (val >= t[0]) return 'good';
+  if (val >= t[1]) return 'warn';
+  return 'bad';
+}
+
+// ═══ COLORS ═══
+const TYPE_COLORS = {
+  'Event Invitation or Reminder': '#7c3aed',
+  'Enablement': '#0891b2',
+  'Newsletter': '#f59e0b',
+  'Operativo': '#059669',
+  'Feedback': '#db2777',
+  'Engagement': '#dc2626',
+  'Product or Feature Announcement': '#2563eb',
+  'Other': '#64748b',
+  '': '#64748b'
+};
+const TYPE_SHORT = {
+  'Event Invitation or Reminder': 'Evento',
+  'Enablement': 'Enablement',
+  'Newsletter': 'Newsletter',
+  'Operativo': 'Operativo',
+  'Feedback': 'Feedback',
+  'Engagement': 'Engagement',
+  'Product or Feature Announcement': 'Producto',
+  'Other': 'Otro',
+  '': 'Sin tipo'
+};
+function typeColor(tp) { return TYPE_COLORS[tp] || '#64748b'; }
+function typeShort(tp) { return TYPE_SHORT[tp] || (tp || 'Sin tipo'); }
+function typeBadge(tp) {
+  const cls = {
+    'Event Invitation or Reminder': 'badge-event',
+    'Enablement': 'badge-edu',
+    'Newsletter': 'badge-news',
+    'Operativo': 'badge-acct',
+    'Engagement': 'badge-promo',
+  }[tp] || 'badge-other';
+  return `<span class="badge ${cls}">${typeShort(tp)}</span>`;
+}
+
+// ═══ PERIOD PICKER ═══
+let ALL_MONTHS = [];
+
+function buildPeriodSelector() {
+  ALL_MONTHS = [...new Set(DATA.map(e => e.ym))].sort().reverse();
+  renderMonthCheckboxes();
+
+  // populate range selects (oldest → newest for natural reading)
+  const sorted = [...ALL_MONTHS].sort();
+  const opts = sorted.map(m => `<option value="${m}">${fmtMonth(m)}</option>`).join('');
+  document.getElementById('range-from').innerHTML = opts;
+  document.getElementById('range-to').innerHTML   = opts;
+  document.getElementById('range-from').value = sorted[0];
+  document.getElementById('range-to').value   = sorted[sorted.length - 1];
+
+  // close panel on outside click
+  document.addEventListener('click', e => {
+    if (!document.getElementById('period-picker').contains(e.target)) closePeriodPanel();
+  }, { capture: true });
+}
+
+function renderMonthCheckboxes() {
+  const container = document.getElementById('pp-months');
+  container.innerHTML = ALL_MONTHS.map(m => `
+    <label class="pp-month ${selectedMonths.has(m) ? 'checked' : ''}" data-ym="${m}">
+      <input type="checkbox" ${selectedMonths.has(m) ? 'checked' : ''} onchange="toggleMonth('${m}',this)">
+      ${fmtMonth(m)}
+    </label>`).join('');
+}
+
+function toggleMonth(ym, cb) {
+  if (cb.checked) selectedMonths.add(ym); else selectedMonths.delete(ym);
+  // si hay meses seleccionados, quitar preset "Todo"
+  document.querySelectorAll('.pp-preset').forEach(b => b.classList.remove('active'));
+  updatePeriodLabel();
+  renderAll();
+}
+
+function applyPreset(p) {
+  document.querySelectorAll('.pp-preset').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.pp-preset[data-preset="${p}"]`).classList.add('active');
+
+  const rangeUI   = document.getElementById('pp-range');
+  const monthsDiv = document.getElementById('pp-months');
+  const divider   = document.getElementById('pp-months-divider');
+
+  if (p === 'range') {
+    rangeUI.classList.add('open');
+    monthsDiv.style.display = 'none';
+    divider.style.display   = 'none';
+    // default: oldest → newest
+    const sorted = [...ALL_MONTHS].sort();
+    document.getElementById('range-from').value = sorted[0];
+    document.getElementById('range-to').value   = sorted[sorted.length - 1];
+    return; // don't close, wait for Aplicar
+  }
+
+  rangeUI.classList.remove('open');
+  monthsDiv.style.display = '';
+  divider.style.display   = '';
+  selectedMonths.clear();
+
+  if (p !== 'all') {
+    const n = +p;
+    ALL_MONTHS.slice(0, n).forEach(m => selectedMonths.add(m));
+  }
+  renderMonthCheckboxes();
+  updatePeriodLabel();
+  closePeriodPanel();
+  renderAll();
+}
+
+function applyRange() {
+  const from = document.getElementById('range-from').value;
+  const to   = document.getElementById('range-to').value;
+  const [f, t] = [from, to].sort(); // ensure order
+  selectedMonths.clear();
+  ALL_MONTHS.filter(m => m >= f && m <= t).forEach(m => selectedMonths.add(m));
+  renderMonthCheckboxes();
+  updatePeriodLabel();
+  closePeriodPanel();
+  // close range UI
+  document.getElementById('pp-range').classList.remove('open');
+  document.getElementById('pp-months').style.display = '';
+  document.getElementById('pp-months-divider').style.display = '';
+  renderAll();
+}
+
+function updatePeriodLabel() {
+  const lbl = document.getElementById('period-label');
+  if (selectedMonths.size === 0) lbl.textContent = 'Todo el período';
+  else if (selectedMonths.size === 1) lbl.textContent = fmtMonth([...selectedMonths][0]);
+  else lbl.textContent = `${selectedMonths.size} meses seleccionados`;
+}
+
+function togglePeriodPanel(e) {
+  e.stopPropagation();
+  const btn = document.getElementById('period-btn');
+  const panel = document.getElementById('period-panel');
+  const isOpen = panel.classList.contains('open');
+  if (isOpen) { closePeriodPanel(); } else { btn.classList.add('open'); panel.classList.add('open'); }
+}
+
+function closePeriodPanel() {
+  document.getElementById('period-btn').classList.remove('open');
+  document.getElementById('period-panel').classList.remove('open');
+}
+
+function fmtMonth(ym) {
+  const [y, m] = ym.split('-');
+  const names = ['','Ene','Feb','Mar','Abr','May','Jun','Jul','Ago','Sep','Oct','Nov','Dic'];
+  return `${names[+m]} ${y}`;
+}
+
+// ═══ NAV ═══
+function navTo(id) {
+  const el = document.getElementById(id);
+  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+function setSeg(seg, el) {
+  activeSeg = seg;
+  document.querySelectorAll('.seg-btn').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderAll();
+}
+
+// ═══ RENDER KPIs ═══
+function renderKPIs() {
+  const rows = filtered();
+  const m = wMetrics(rows);
+  const seg = activeSeg;
+
+  const label = { all: '· todos los segmentos', mass: '· Base completa (>1.000)', mid: '· Base mediana (100–1.000)', small: '· Base micro (<100)' }[seg];
+  document.getElementById('kpi-seg-label').textContent = label;
+
+  const brStatus   = m.br   <= 0.5 ? 'good' : m.br   <= 1   ? 'warn' : 'bad';
+  const freqMonths = new Set(rows.map(e => e.ym)).size || 1;
+
+  const bench = {
+    or:   seg==='mid' ? '≥50% bueno · ≥35% ok' : seg==='small' ? '≥65% bueno · ≥45% ok' : '≥25% bueno · ≥18% ok',
+    ctr:  seg==='mid' ? '≥8% bueno · ≥3% ok'   : seg==='small' ? '≥15% bueno · ≥8% ok'  : '≥1.2% bueno · ≥0.6% ok',
+    ctor: '≥8% bueno · ≥4% ok',
+    br:   '≤0.5% bueno · ≤1% ok',
+  };
+
+  // ── Tooltips (global floating) ──
+  const TT = {
+    emails:   `<strong>Emails</strong>Campañas del período. Excluye envíos de prueba.`,
+    enviados: `<strong>Enviados</strong><code>Σ env</code>Total de contactos destinatarios. El subtexto muestra entregados y DR.`,
+    aperturas:`<strong>Aperturas únicas</strong><code>Σ ab</code>Primera apertura por contacto por email.`,
+    clics:    `<strong>Clics únicos</strong><code>Σ cl</code>Primer clic por contacto por email en cualquier link.`,
+    or:       `<strong>Open Rate</strong><code>aperturas / entregados × 100</code>Calculado sobre entregados, igual que HubSpot.`,
+    ctr:      `<strong>Click-Through Rate</strong><code>clics / entregados × 100</code>Alcance del CTA sobre toda la base entregada.`,
+    ctor:     `<strong>Click-to-Open Rate</strong><code>clics / aperturas × 100</code>Calidad del contenido entre quienes abrieron.`,
+    br:       `<strong>Tasa de rebote</strong><code>(env − ent) / env × 100</code>Incluye rebotes duros y blandos. >1% requiere revisión.`,
+  };
+  const tt = (key) => `<i class="tt-icon" data-tt="${key}" tabindex="0">i</i>`;
+
+  // ── Volumen (summary strip) ──
+  const volKpis = [
+    { label: 'Emails',    ttKey:'emails',    val: m.count,  fmt: v => fmtN(v), sub: `en el período` },
+    { label: 'Enviados',  ttKey:'enviados',  val: m.total,  fmt: v => fmtN(v), sub: `${fmtN(m.deliv)} entregados · DR ${m.dr.toFixed(1)}%` },
+    { label: 'Aperturas', ttKey:'aperturas', val: m.opens,  fmt: v => fmtN(v), sub: `únicas totales` },
+    { label: 'Clics',     ttKey:'clics',     val: m.clicks, fmt: v => fmtN(v), sub: `totales` },
+  ];
+
+  document.getElementById('kpi-vol').innerHTML = volKpis.map(k => `
+    <div class="kpi-summary-item">
+      <div class="kpi-summary-label" style="display:flex;align-items:center">${k.label}${tt(k.ttKey)}</div>
+      <div class="kpi-summary-value">${k.fmt(k.val)}</div>
+      <div class="kpi-summary-sub">${k.sub}</div>
+    </div>`).join('');
+
+  // ── Tasas (cards con estado) ──
+  const rateKpis = [
+    { label: 'Open Rate',      ttKey:'or',  val: m.or,   fmt: v => v.toFixed(1)+'%', sub: `${fmtN(m.opens)} / ${fmtN(m.deliv)} entregados`, metric: 'or'   },
+    { label: 'CTR',            ttKey:'ctr', val: m.ctr,  fmt: v => v.toFixed(2)+'%', sub: `${fmtN(m.clicks)} clics / ${fmtN(m.deliv)} entregados`, metric: 'ctr' },
+    { label: 'CTOR',           ttKey:'ctor',val: m.ctor, fmt: v => v.toFixed(1)+'%', sub: `Calidad del clic · de quienes abrieron`, metric: 'ctor' },
+    { label: 'Tasa de rebote', ttKey:'br',  val: m.br,   fmt: v => v.toFixed(2)+'%', sub: `${fmtN(m.bounces)} rebotes / ${fmtN(m.total)} env`, customStatus: brStatus },
+  ];
+
+  document.getElementById('kpi-rates').innerHTML = rateKpis.map(k => {
+    const status = k.customStatus || segStatus(k.val, k.metric, seg);
+    const b = bench[k.metric || 'br'];
+    return `<div class="card kpi-card ${status}">
+      <div class="kpi-label" style="display:flex;align-items:center">${k.label}${tt(k.ttKey)}</div>
+      <div class="kpi-value">${k.fmt(k.val)}</div>
+      <div class="kpi-sub">${k.sub}</div>
+      ${b ? `<div class="kpi-bench"><span class="status-dot ${status}"></span>${b}</div>` : ''}
+    </div>`;
+  }).join('');
+}
+
+function fmtN(n) { return n >= 1e6 ? (n/1e6).toFixed(1)+'M' : n >= 1e3 ? (n/1e3).toFixed(1)+'k' : n; }
+function fmtPct(v) { return v.toFixed(2)+'%'; }
+
+// ═══ RENDER EVOLUTION ═══
+function renderEvolution() {
+  const rows = filtered();
+  const byMonth = {};
+  rows.forEach(e => {
+    if (!byMonth[e.ym]) byMonth[e.ym] = [];
+    byMonth[e.ym].push(e);
+  });
+  const months = Object.keys(byMonth).sort();
+  const ors = months.map(m => { const mx = wMetrics(byMonth[m]); return +mx.or.toFixed(2); });
+  const ctrs = months.map(m => { const mx = wMetrics(byMonth[m]); return +mx.ctr.toFixed(2); });
+  const counts = months.map(m => byMonth[m].length);
+
+  // Benchmark: OR ponderado de todos los emails de segmento masa (>1.000 enviados), período completo
+  const massEmails = DATA.filter(e => e.seg === 'mass');
+  const massBench  = wMetrics(massEmails);
+  const orBench    = +massBench.or.toFixed(2);
+  const ctrBench   = +massBench.ctr.toFixed(2);
+
+  // Footnote dinámico
+  const note = document.getElementById('evolution-bench-note');
+  if (note) {
+    note.innerHTML = massEmails.length
+      ? `<span style="color:var(--green)">──</span> Benchmark OR: <strong style="color:rgba(255,255,255,.6)">${orBench}%</strong> · OR ponderado de <strong style="color:rgba(255,255,255,.6)">${massEmails.length} emails</strong> de base completa (&gt;1.000 enviados) en todo el período. No es un estándar de industria — es tu propio histórico de masa.`
+      : `Sin datos de segmento masa para calcular benchmark.`;
+  }
+
+  destroyChart('evolution');
+  const ctx = document.getElementById('chart-evolution').getContext('2d');
+  charts['evolution'] = new Chart(ctx, {
+    data: {
+      labels: months.map(fmtMonth),
+      datasets: [
+        { type: 'bar', label: 'Open Rate %', data: ors, backgroundColor: 'rgba(0,104,255,0.5)', borderColor: '#0068ff', borderWidth: 1, yAxisID: 'y', borderRadius: 4 },
+        { type: 'bar', label: 'CTR %', data: ctrs, backgroundColor: 'rgba(94,207,255,0.35)', borderColor: '#5ecfff', borderWidth: 1, yAxisID: 'y', borderRadius: 4 },
+        { type: 'line', label: 'Benchmark OR', data: months.map(() => orBench), borderColor: '#00d97e', borderWidth: 1.5, borderDash: [4,3], pointRadius: 0, yAxisID: 'y', fill: false },
+        { type: 'line', label: '# emails', data: counts, borderColor: '#f5a623', borderWidth: 2, pointRadius: 3, yAxisID: 'y2', fill: false, tension: 0.3 }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend: { labels: { color: '#9ab0cc', font: { size: 11 }, boxWidth: 12 } }, tooltip: { mode: 'index', backgroundColor: '#001328', titleColor: '#fff', bodyColor: '#9ab0cc', borderColor: '#1e3248', borderWidth: 1 } },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ab0cc', font: { size: 11 } } },
+        y: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ab0cc', font: { size: 11 }, callback: v => v+'%' }, title: { display: true, text: 'OR / CTR %', color: '#4a6580', font: { size: 10 } } },
+        y2: { position: 'right', grid: { display: false }, ticks: { color: '#f5a623', font: { size: 10 } }, title: { display: true, text: '# emails', color: '#f5a623', font: { size: 10 } } }
+      }
+    }
+  });
+}
+
+// ═══ RENDER SEGMENTS ═══
+function renderSegments() {
+  const segs = [
+    { key: 'mass', label: 'Base completa', desc: '>1.000 contactos', color: '#7c3aed' },
+    { key: 'mid', label: 'Base mediana', desc: '100–1.000 contactos', color: '#0891b2' },
+    { key: 'small', label: 'Base micro', desc: '<100 contactos', color: '#059669' }
+  ];
+  const rows = filteredNoSeg();
+  document.getElementById('seg-cards').innerHTML = segs.map(s => {
+    const segRows = rows.filter(e => e.seg === s.key);
+    const m = wMetrics(segRows);
+    if (!segRows.length) return `<div class="card"><div class="label" style="color:${s.color}">${s.label}</div><div style="font-size:12px;color:var(--gray-500);margin-top:8px">Sin datos en el período</div></div>`;
+    const orS = segStatus(m.or, 'or', s.key);
+    const ctrS = segStatus(m.ctr, 'ctr', s.key);
+    return `<div class="card" style="border-top:3px solid ${s.color}">
+      <div class="label" style="color:${s.color}">${s.label}</div>
+      <div style="font-size:11px;color:var(--gray-500);margin-bottom:12px">${s.desc} · ${m.count} emails · ${fmtN(m.total)} envíos totales</div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+        <div><div style="font-size:11px;color:var(--gray-500)">Open Rate</div><div style="font-size:22px;font-weight:700;display:flex;align-items:center;gap:5px"><span class="status-dot ${orS}"></span>${m.or.toFixed(1)}%</div></div>
+        <div><div style="font-size:11px;color:var(--gray-500)">CTR</div><div style="font-size:22px;font-weight:700;display:flex;align-items:center;gap:5px"><span class="status-dot ${ctrS}"></span>${m.ctr.toFixed(2)}%</div></div>
+        <div><div style="font-size:11px;color:var(--gray-500)">CTOR</div><div style="font-size:20px;font-weight:700">${m.ctor.toFixed(1)}%</div></div>
+        <div><div style="font-size:11px;color:var(--gray-500)">Entrega</div><div style="font-size:20px;font-weight:700">${m.dr.toFixed(1)}%</div></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ═══ RENDER SCATTER ═══
+function renderScatter() {
+  const rows = filtered();
+
+  // Promedios OR por segmento (para líneas de referencia)
+  const avg = seg => {
+    const r = rows.filter(e => e.seg === seg);
+    return r.length ? +(r.reduce((s,e) => s + e.or, 0) / r.length).toFixed(1) : 0;
+  };
+  const avgMass  = avg('mass');
+  const avgMid   = avg('mid');
+  const avgSmall = avg('small');
+
+  // Colores por segmento (no por tipo)
+  const segColor = { mass: '#a78bfa', mid: '#38bdf8', small: '#34d399' };
+
+  // Dataset principal — un punto por email, color por segmento
+  const mainData = rows.map(e => ({
+    x: e.env,
+    y: e.or,
+    seg: e.seg,
+    label: e.n.replace(/\[.*?\]\s*/g,'').trim().slice(0, 52),
+    tipo: typeShort(e.tp),
+    deliv: e.ent,
+    sends: e.env,
+  }));
+
+  // Separar por segmento para colorear
+  const datasets = ['mass','mid','small'].map(seg => ({
+    label: { mass: 'Base completa', mid: 'Base mediana', small: 'Base micro' }[seg],
+    data: mainData.filter(p => p.seg === seg),
+    backgroundColor: segColor[seg] + 'bb',
+    borderColor: segColor[seg],
+    borderWidth: 1,
+    pointRadius: 5,
+    pointHoverRadius: 8,
+  }));
+
+  // Líneas de promedio por segmento como anotaciones manuales via datasets vacíos
+  // (usamos un truco: líneas como datasets type line con 2 puntos)
+  const avgLines = ['mass','mid','small'].map(seg => {
+    const xMin = seg === 'mass' ? 1000 : seg === 'mid' ? 100 : 1;
+    const xMax = seg === 'mass' ? 20000 : seg === 'mid' ? 1000 : 100;
+    const avgVal = seg === 'mass' ? avgMass : seg === 'mid' ? avgMid : avgSmall;
+    return {
+      type: 'line',
+      label: `Avg ${seg}`,
+      data: [{ x: xMin, y: avgVal }, { x: xMax, y: avgVal }],
+      borderColor: segColor[seg] + '66',
+      borderWidth: 1.5,
+      borderDash: [5, 4],
+      pointRadius: 0,
+      fill: false,
+      tension: 0,
+    };
+  });
+
+  destroyChart('scatter');
+  const ctx = document.getElementById('chart-scatter').getContext('2d');
+  charts['scatter'] = new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets: [...datasets, ...avgLines] },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          filter: item => item.dataset.type !== 'line' && item.raw.label,
+          backgroundColor: 'rgba(0,20,50,0.97)',
+          titleColor: '#fff',
+          bodyColor: '#9ca3af',
+          borderColor: 'rgba(255,255,255,0.12)',
+          borderWidth: 1,
+          padding: 11,
+          callbacks: {
+            title: items => items[0].raw.label || '',
+            label: item => [
+              `Enviados: ${fmtN(item.raw.sends)}`,
+              `Open Rate: ${item.raw.y.toFixed(1)}%`,
+              `Tipo: ${item.raw.tipo}`,
+            ]
+          }
+        }
+      },
+      scales: {
+        x: {
+          type: 'logarithmic',
+          min: 4,
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#4b5563',
+            font: { size: 10, family: 'Plus Jakarta Sans' },
+            callback: v => [10,100,1000,5000,10000,20000].includes(v) ? fmtN(v) : ''
+          },
+          title: { display: true, text: 'Emails enviados  (escala logarítmica →)', color: '#4b5563', font: { size: 10, family: 'Plus Jakarta Sans' } }
+        },
+        y: {
+          min: 0,
+          grid: { color: 'rgba(255,255,255,0.04)' },
+          ticks: {
+            color: '#4b5563',
+            font: { size: 10, family: 'Plus Jakarta Sans' },
+            callback: v => v + '%'
+          },
+          title: { display: true, text: 'Open Rate %', color: '#4b5563', font: { size: 10, family: 'Plus Jakarta Sans' } }
+        }
+      }
+    }
+  });
+
+  // Leyenda custom con promedios
+  document.getElementById('scatter-legend').innerHTML = [
+    { seg: 'mass',  label: 'Base completa  >1.000' },
+    { seg: 'mid',   label: 'Base mediana  100–1.000' },
+    { seg: 'small', label: 'Base micro  <100' },
+  ].map(({ seg, label }) => {
+    const avgVal = seg === 'mass' ? avgMass : seg === 'mid' ? avgMid : avgSmall;
+    return `<div class="scatter-legend-item">
+      <div class="scatter-legend-dot" style="background:${segColor[seg]}"></div>
+      <span>${label}</span>
+      <span style="margin-left:6px;color:${segColor[seg]};font-weight:700">OR avg ${avgVal}%</span>
+    </div>`;
+  }).join('');
+}
+
+// ═══ RENDER TYPES ═══
+function renderTypes() {
+  const rows = filtered();
+  const typeGroups = {};
+  rows.forEach(e => {
+    const k = e.tp || 'Other';
+    if (!typeGroups[k]) typeGroups[k] = [];
+    typeGroups[k].push(e);
+  });
+  const types = Object.keys(typeGroups).sort((a, b) => typeGroups[b].reduce((s,e)=>s+e.env,0) - typeGroups[a].reduce((s,e)=>s+e.env,0));
+  const ors = types.map(t => wMetrics(typeGroups[t]).or);
+  const ctrs = types.map(t => wMetrics(typeGroups[t]).ctr);
+  const colors = types.map(typeColor);
+  const labels = types.map(typeShort);
+
+  destroyChart('type-or');
+  destroyChart('type-ctr');
+
+  const makeOpts = (metric, benchData) => ({
+    indexAxis: 'y',
+    responsive: true, maintainAspectRatio: false,
+    plugins: {
+      legend: { display: false },
+      tooltip: { backgroundColor: '#001328', titleColor: '#fff', bodyColor: '#9ab0cc', borderColor: '#1e3248', borderWidth: 1, callbacks: { label: item => metric+': '+item.raw.toFixed(2)+'%' } }
+    },
+    scales: {
+      x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ab0cc', font: { size: 10 }, callback: v => v+'%' } },
+      y: { grid: { display: false }, ticks: { color: '#fff', font: { size: 11 } } }
+    }
+  });
+
+  const ctx1 = document.getElementById('chart-type-or').getContext('2d');
+  charts['type-or'] = new Chart(ctx1, {
+    type: 'bar',
+    data: { labels, datasets: [{ data: ors, backgroundColor: colors.map(c => c+'99'), borderColor: colors, borderWidth: 1, borderRadius: 4 }] },
+    options: makeOpts('OR')
+  });
+
+  const ctx2 = document.getElementById('chart-type-ctr').getContext('2d');
+  charts['type-ctr'] = new Chart(ctx2, {
+    type: 'bar',
+    data: { labels, datasets: [{ data: ctrs, backgroundColor: colors.map(c => c+'99'), borderColor: colors, borderWidth: 1, borderRadius: 4 }] },
+    options: makeOpts('CTR')
+  });
+
+}
+
+// ═══ RENDER SATURATION ═══
+function renderSaturation() {
+  const rows = filtered();
+
+  // Agrupar por mes y segmento
+  const segs = [
+    { key: 'mass',  label: 'Base completa',  color: '#a78bfa' },
+    { key: 'mid',   label: 'Base mediana',   color: '#38bdf8' },
+    { key: 'small', label: 'Base micro',     color: '#34d399' },
+  ];
+
+  const allMonths = [...new Set(rows.map(e => e.ym))].sort();
+
+  // ── Mini stats: frecuencia promedio por segmento ──
+  const statsEl = document.getElementById('saturation-stats');
+  statsEl.innerHTML = segs.map(s => {
+    const sr = rows.filter(e => e.seg === s.key);
+    const months = new Set(sr.map(e => e.ym)).size || 1;
+    const freq = sr.length ? (sr.length / months).toFixed(1) : '—';
+    const orAvg = sr.length ? wMetrics(sr).or.toFixed(1) + '%' : '—';
+    return `<div class="card" style="padding:14px 18px;border-top:2px solid ${s.color}">
+      <div style="font-size:9px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:${s.color};margin-bottom:6px">${s.label}</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div>
+          <div style="font-size:22px;font-weight:800;color:var(--white);line-height:1">${freq}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4);margin-top:2px">emails / mes</div>
+        </div>
+        <div style="text-align:right">
+          <div style="font-size:16px;font-weight:700;color:${s.color}">${orAvg}</div>
+          <div style="font-size:10px;color:rgba(255,255,255,.4)">OR prom.</div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  // ── Datasets: línea OR por segmento + barras de frecuencia ──
+  const datasets = [];
+  segs.forEach(s => {
+    const byM = {};
+    rows.filter(e => e.seg === s.key).forEach(e => {
+      if (!byM[e.ym]) byM[e.ym] = [];
+      byM[e.ym].push(e);
+    });
+    const orData   = allMonths.map(m => byM[m] ? +wMetrics(byM[m]).or.toFixed(2) : null);
+    const freqData = allMonths.map(m => byM[m] ? byM[m].length : 0);
+    datasets.push({ type: 'line', label: `OR ${s.label}`, data: orData,
+      borderColor: s.color, backgroundColor: s.color+'22',
+      borderWidth: 2, pointRadius: 4, pointBackgroundColor: s.color,
+      yAxisID: 'y', fill: false, tension: 0.3, spanGaps: true });
+    datasets.push({ type: 'bar', label: `Emails ${s.label}`, data: freqData,
+      backgroundColor: s.color+'33', borderColor: s.color+'88',
+      borderWidth: 1, borderRadius: 3, yAxisID: 'y2', hidden: s.key !== 'mass' });
+  });
+
+  destroyChart('saturation');
+  const ctx = document.getElementById('chart-saturation').getContext('2d');
+  charts['saturation'] = new Chart(ctx, {
+    data: { labels: allMonths.map(fmtMonth), datasets },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#9ab0cc', font: { size: 10 }, boxWidth: 10, filter: i => !i.text.startsWith('Emails') } },
+        tooltip: { mode: 'index', backgroundColor: '#001328', titleColor: '#fff', bodyColor: '#9ab0cc', borderColor: '#1e3248', borderWidth: 1,
+          callbacks: { label: item => item.dataset.yAxisID === 'y' ? `${item.dataset.label}: ${item.raw?.toFixed(1) ?? '—'}%` : `${item.dataset.label}: ${item.raw} emails` }
+        }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ab0cc', font: { size: 11 } } },
+        y:  { grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#9ab0cc', font: { size: 10 }, callback: v => v+'%' }, title: { display: true, text: 'Open Rate %', color: '#9ab0cc', font: { size: 10 } } },
+        y2: { position: 'right', grid: { display: false }, ticks: { color: 'rgba(255,255,255,.3)', font: { size: 10 } }, title: { display: true, text: '# emails', color: 'rgba(255,255,255,.3)', font: { size: 10 } } }
+      }
+    }
+  });
+
+  // ── Nota en lenguaje simple ──
+  const massRows = rows.filter(e => e.seg === 'mass');
+  const massByM  = {};
+  massRows.forEach(e => { if (!massByM[e.ym]) massByM[e.ym] = []; massByM[e.ym].push(e); });
+  const massMonths = Object.keys(massByM).sort();
+  const freqs = massMonths.map(m => massByM[m].length);
+  const ors   = massMonths.map(m => wMetrics(massByM[m]).or);
+  const avgFreq = freqs.length ? (freqs.reduce((a,b)=>a+b,0)/freqs.length).toFixed(1) : 0;
+  const corr = pearson(freqs, ors);
+  let noteText = '';
+  if (massMonths.length >= 3) {
+    const highFreqMonths = massMonths.filter((_,i) => freqs[i] > +avgFreq);
+    const lowORonHigh    = highFreqMonths.filter(m => ors[massMonths.indexOf(m)] < wMetrics(massRows).or).length;
+    if (corr < -0.4)
+      noteText = `En <strong style="color:rgba(255,255,255,.7)">${lowORonHigh} de ${highFreqMonths.length}</strong> meses con más envíos que el promedio, el OR de base completa estuvo por debajo del promedio del período. Puede ser señal de fatiga de audiencia.`;
+    else
+      noteText = `No se observa un patrón claro entre la cantidad de envíos por mes y el open rate en el período seleccionado.`;
+  }
+  document.getElementById('saturation-note').innerHTML = noteText ? `ℹ️ ${noteText}` : '';
+}
+
+function pearson(xs, ys) {
+  const n = xs.length;
+  if (n < 2) return 0;
+  const mx = xs.reduce((a,b)=>a+b,0)/n, my = ys.reduce((a,b)=>a+b,0)/n;
+  const num = xs.reduce((s,x,i)=>s+(x-mx)*(ys[i]-my),0);
+  const den = Math.sqrt(xs.reduce((s,x)=>s+(x-mx)**2,0)*ys.reduce((s,y)=>s+(y-my)**2,0));
+  return den ? num/den : 0;
+}
+
+// ═══ RENDER PERFORMERS ═══
+function renderPerformers() {
+  const allRows = filteredNoSeg();
+  const massRows = allRows.filter(e => e.seg === 'mass');
+  const midRows  = allRows.filter(e => e.seg === 'mid');
+  const smallRows = allRows.filter(e => e.seg === 'small');
+
+  const topMass  = [...massRows].sort((a,b) => b.or   - a.or  ).slice(0, 5);
+  const topMid   = [...midRows ].sort((a,b) => b.or   - a.or  ).slice(0, 5);
+  const topSmall = [...smallRows].sort((a,b) => b.ctor - a.ctor).slice(0, 5);
+
+  const numClass = i => i === 0 ? 'top1' : i === 1 ? 'top2' : i === 2 ? 'top3' : '';
+
+  function perfIcon(color) {
+    return `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>`;
+  }
+
+  function rankList(rows, metricKey, metricSuffix, color) {
+    if (!rows.length) return `<div style="font-size:12px;color:var(--gray-500);padding:16px 0;text-align:center">Sin datos para este período</div>`;
+    const maxVal = Math.max(...rows.map(e => e[metricKey]), 1);
+    return rows.map((e, i) => {
+      const shortName = e.n.replace(/\[.*?\]\s*/g, '').trim();
+      const pct = (e[metricKey] / maxVal * 100).toFixed(0);
+      return `<div class="perf-item">
+        <div class="perf-num ${numClass(i)}">${i+1}</div>
+        <div class="perf-body">
+          <div class="perf-title">${shortName}</div>
+          <div class="perf-meta">${fmtN(e.env)} enviados · ${typeShort(e.tp)}</div>
+          <div class="perf-bar"><div class="perf-bar-fill" style="width:${pct}%;background:${color}"></div></div>
+        </div>
+        <div class="perf-val" style="color:${color}">${e[metricKey].toFixed(1)}${metricSuffix}</div>
+      </div>`;
+    }).join('');
+  }
+
+  function card(title, sub, iconColor, bgColor, rows, metricKey, metricSuffix, accentColor) {
+    return `<div class="card" style="padding:18px">
+      <div class="perf-card-header">
+        <div class="perf-card-badge" style="background:${bgColor}">${perfIcon(iconColor)}</div>
+        <div>
+          <div class="perf-card-title">${title}</div>
+          <div class="perf-card-sub">${sub}</div>
+        </div>
+      </div>
+      <div class="perf-list">${rankList(rows, metricKey, metricSuffix, accentColor)}</div>
+    </div>`;
+  }
+
+  document.getElementById('perf-grid').innerHTML =
+    card('Base completa · Top OR',  '>1.000 enviados', '#a78bfa', 'rgba(124,58,237,.15)', topMass,  'or',   '%', '#a78bfa') +
+    card('Base mediana · Top OR',   '100–1.000 enviados', '#38bdf8', 'rgba(8,145,178,.15)',  topMid,   'or',   '%', '#38bdf8') +
+    card('Base micro · Top CTOR',   '<100 enviados · calidad de clic', '#34d399', 'rgba(5,150,105,.15)', topSmall, 'ctor', '%', '#34d399');
+}
+
+// ═══ METODOLOGÍA DRAWER ═══
+function openMetodo() {
+  document.getElementById('metodo-overlay').classList.add('open');
+  document.getElementById('metodo-drawer').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeMetodo() {
+  document.getElementById('metodo-overlay').classList.remove('open');
+  document.getElementById('metodo-drawer').classList.remove('open');
+  document.body.style.overflow = '';
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMetodo(); });
+
+// ═══ RENDER TABLE ═══
+let sortCol = 'or', sortDir = -1, tablePage = 0;
+const TABLE_SIZE = 10;
+
+function renderTable() {
+  let rows = filtered();
+  const q = (document.getElementById('tbl-search')?.value || '').toLowerCase();
+  if (q) { rows = rows.filter(e => e.n.toLowerCase().includes(q) || e.a.toLowerCase().includes(q) || (e.tp||'').toLowerCase().includes(q)); tablePage = 0; }
+  rows = [...rows].sort((a,b) => (a[sortCol] > b[sortCol] ? 1 : -1) * sortDir);
+
+  const total = rows.length;
+  const totalPages = Math.max(1, Math.ceil(total / TABLE_SIZE));
+  tablePage = Math.min(tablePage, totalPages - 1);
+  const pageRows = rows.slice(tablePage * TABLE_SIZE, (tablePage + 1) * TABLE_SIZE);
+
+  document.getElementById('table-count').textContent = `· ${total} emails`;
+
+  // outlier detection: OR > mean + 1.5*stddev for mass
+  const massOrs = DATA.filter(e=>e.seg==='mass').map(e=>e.or);
+  const muOR = massOrs.reduce((s,v)=>s+v,0)/massOrs.length;
+  const sdOR = Math.sqrt(massOrs.reduce((s,v)=>s+(v-muOR)**2,0)/massOrs.length);
+  const outlierHigh = muOR + 1.5*sdOR;
+
+  const cols = [
+    { key: 'n', label: 'Nombre', fmt: (v,e) => `<span style="max-width:200px;overflow:hidden;text-overflow:ellipsis;display:block">${v.replace(/\[.*?\]\s*/g,'')}<small style="color:var(--gray-500);font-size:10px;display:block">${e.a}</small></span>` },
+    { key: 'f', label: 'Fecha', fmt: v => v.slice(0,7) === v.slice(0,7) ? v : v },
+    { key: 'tp', label: 'Tipo', fmt: v => typeBadge(v) },
+    { key: 'seg', label: 'Seg', fmt: v => ({ mass: '<span class="tag-mass">Mass</span>', mid: '<span class="tag-mid">Mid</span>', small: '<span class="tag-small">Small</span>' }[v]||v) },
+    { key: 'env', label: 'Enviados', fmt: v => fmtN(v) },
+    { key: 'or', label: 'OR %', fmt: (v,e) => `<span style="font-weight:700;color:${e.or>=outlierHigh?'#5ecfff':segStatus(v,'or',e.seg)==='good'?'var(--green)':segStatus(v,'or',e.seg)==='warn'?'var(--yellow)':'var(--red)'}">${v.toFixed(1)}%${e.or>=outlierHigh?' ⭐':''}</span>` },
+    { key: 'ctr', label: 'CTR %', fmt: v => v.toFixed(2)+'%' },
+    { key: 'ctor', label: 'CTOR %', fmt: v => v.toFixed(1)+'%' },
+    { key: 'ab', label: 'Aperturas', fmt: v => fmtN(v) },
+    { key: 'cl', label: 'Clics', fmt: v => fmtN(v) },
+    { key: 'by', label: 'Por', fmt: v => v === 'Candela Caamaño' ? '<span style="color:#5ecfff">Candela</span>' : '<span style="color:#9ab0cc">Daniela</span>' }
+  ];
+
+  const html = `<table class="ftable">
+    <thead><tr>${cols.map(c => `<th onclick="sortTable('${c.key}')" title="Ordenar por ${c.label}">${c.label}${sortCol===c.key?(sortDir>0?' ↑':' ↓'):''}</th>`).join('')}</tr></thead>
+    <tbody>${pageRows.length ? pageRows.map(e => `<tr class="${e.seg==='mass'&&e.or>=outlierHigh?'outlier':''}">${cols.map(c => `<td>${c.fmt ? c.fmt(e[c.key], e) : e[c.key]}</td>`).join('')}</tr>`).join('') : '<tr><td colspan="'+cols.length+'" class="empty-state">Sin resultados</td></tr>'}</tbody>
+  </table>`;
+
+  const from = total ? tablePage * TABLE_SIZE + 1 : 0;
+  const to   = Math.min((tablePage + 1) * TABLE_SIZE, total);
+  const pagination = `<div class="tbl-pagination">
+    <span class="tbl-pagination-info">Mostrando ${from}–${to} de ${total} emails</span>
+    <div class="tbl-pagination-btns">
+      <button class="tbl-pg-btn" onclick="goTablePage(0)" ${tablePage===0?'disabled':''}>«</button>
+      <button class="tbl-pg-btn" onclick="goTablePage(${tablePage-1})" ${tablePage===0?'disabled':''}>‹ Anterior</button>
+      <button class="tbl-pg-btn active">${tablePage+1} / ${totalPages}</button>
+      <button class="tbl-pg-btn" onclick="goTablePage(${tablePage+1})" ${tablePage>=totalPages-1?'disabled':''}>Siguiente ›</button>
+      <button class="tbl-pg-btn" onclick="goTablePage(${totalPages-1})" ${tablePage>=totalPages-1?'disabled':''}>»</button>
+    </div>
+  </div>`;
+
+  document.getElementById('full-table-wrap').innerHTML = html + pagination;
+}
+
+function goTablePage(p) {
+  tablePage = p;
+  renderTable();
+  document.getElementById('s-table').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function sortTable(col) {
+  if (sortCol === col) sortDir *= -1;
+  else { sortCol = col; sortDir = -1; }
+  renderTable();
+}
+
+// ═══ RENDER INSIGHTS ═══
+function renderInsights() {
+  const mass = DATA.filter(e => e.seg === 'mass');
+  const mMass = wMetrics(mass);
+
+  const byMonth = {};
+  mass.forEach(e => { if(!byMonth[e.ym]) byMonth[e.ym]=[]; byMonth[e.ym].push(e); });
+  const months = Object.keys(byMonth).sort().filter(m => m >= '2026-01');
+  const aprFreq = (byMonth['2026-04']||[]).length;
+  const marOR = months.includes('2026-03') ? wMetrics(byMonth['2026-03']).or : 0;
+  const aprOR = months.includes('2026-04') ? wMetrics(byMonth['2026-04']).or : 0;
+
+  const byType = {};
+  mass.forEach(e => { const k = e.tp||'Other'; if(!byType[k]) byType[k]=[]; byType[k].push(e); });
+  const eduMass = wMetrics(byType['Enablement']||[]);
+  const eventMass = wMetrics(byType['Event Invitation or Reminder']||[]);
+  const comisionesMass = mass.filter(e => e.n.toLowerCase().includes('comision'));
+  const comisionesMet = wMetrics(comisionesMass);
+
+  const svgIcon = (path, color='var(--primary)') =>
+    `<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+
+  const insights = [
+    {
+      icon: svgIcon('<polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/>','var(--red)'),
+      title: 'Saturación en abril: 11 mass emails, OR en mínimo histórico',
+      body: `En abril 2026 se enviaron <strong>${aprFreq} mass emails</strong> (>1.000 destinatarios). El OR ponderado de masa cayó a <strong>${aprOR.toFixed(1)}%</strong>, vs ${marOR.toFixed(1)}% en marzo (1 mass email). La correlación negativa frecuencia↔OR sugiere que la base de partners está recibiendo demasiadas comunicaciones en poco tiempo. Recomendación: establecer un tope de 2–3 mass emails por semana y priorizar por urgencia.`
+    },
+    {
+      icon: svgIcon('<line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>','var(--green)'),
+      title: 'Emails de comisiones: el OR más alto de masa con diferencia',
+      body: `Los emails sobre comisiones y pagos logran <strong>OR del ${comisionesMet.or > 0 ? comisionesMet.or.toFixed(1) : '40–50'}%</strong> en la base de masa, muy por encima del promedio (${mMass.or.toFixed(1)}%). El dinero activa apertura. Implicación: si necesitás garantizar lectura de un mensaje, incluí un dato de impacto económico directo en el asunto, no solo una invitación.`
+    },
+    {
+      icon: svgIcon('<circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/>','var(--accent)'),
+      title: 'Small emails: las métricas no son comparables con mass',
+      body: `Los emails a listas <100 (confirmaciones de eventos, sesiones exclusivas) tienen ORs de <strong>50–80%</strong> — parecen un éxito rotundo comparados con mass. Pero son audiencias autoseleccionadas (ya confirmaron asistir). Nunca uses estos números para justificar performance general: son proxies de segmentación, no de contenido.`
+    },
+    {
+      icon: svgIcon('<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.71 3.53 2 2 0 0 1 3.68 1.35h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 14.92z"/>','var(--yellow)'),
+      title: 'Eventos masivos: el CTR es el KPI real, no el OR',
+      body: `Para invitaciones masivas a eventos (tipo Tecnomoda, D2C Summit, Entrenamiento Nube) el OR ronda <strong>15–17%</strong>, pero el CTR de 0.4–0.7% es el número accionable: ¿cuántos hicieron clic al registro? El urgency ("últimos cupos", "24hs") mejora CTR en segundos envíos de la misma campaña — pero aplicar urgency en primer contacto genera desconfianza. Usalo en follow-up, no en cold outreach.`
+    },
+    {
+      icon: svgIcon('<path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>','var(--primary-light)'),
+      title: 'Contenido educativo de calidad rompe el promedio',
+      body: `"Actualización de datos comisiones" (${comisionesMet.or > 0 ? comisionesMet.or.toFixed(1)+'%' : '40%'} OR) y "Lanzamientos para partners AR" (23% OR en lista de 8.400) muestran que <strong>contenido con impacto directo en el negocio</strong> supera en 40–80% al promedio de masa. El patrón: asunto específico + valor tangible en primera línea + lista segmentada (solo los que ya operan el feature).`
+    },
+    {
+      icon: svgIcon('<rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>','var(--gray-300)'),
+      title: 'La frecuencia óptima de masa está entre 2–4 emails/mes',
+      body: `Los meses con mejor OR ponderado de masa (feb–mar 2026: ~39%) coinciden con 1–3 mass emails enviados. A partir de 6 o más, el OR cae consistentemente por debajo del 20%. El umbral de fatiga en esta base parece estar en la semana: si hay más de 2 mass en 7 días, el segundo siempre abre menos que el primero.`
+    }
+  ];
+
+  document.getElementById('insights-grid').innerHTML = insights.map(i => `
+    <div class="card insight-card">
+      <div class="insight-icon">${i.icon}</div>
+      <div class="insight-body"><h4>${i.title}</h4><p>${i.body}</p></div>
+    </div>`).join('');
+}
+
+// ═══ CHART HELPER ═══
+function destroyChart(key) {
+  if (charts[key]) { charts[key].destroy(); delete charts[key]; }
+}
+
+// ═══ RENDER ALL ═══
+function renderAll() {
+  tablePage = 0;
+  renderKPIs();
+  renderEvolution();
+  renderSegments();
+  renderScatter();
+  renderTypes();
+  renderSaturation();
+  renderPerformers();
+  renderTable();
+  renderInsights();
+}
+
+// ═══ IMPORT MODAL ═══
+let activeImportTab = 'file';
+function openImport() {
+  document.getElementById('import-modal').classList.add('open');
+  // Pre-populate with saved URL or the default SHEET_URL
+  const saved = localStorage.getItem('partners_gsheet_url');
+  document.getElementById('gsheet-url').value = saved || SHEET_URL;
+  const autoOn = localStorage.getItem('partners_gsheet_auto') === '1';
+  document.getElementById('gsheet-auto').checked = autoOn;
+}
+function closeImport() { document.getElementById('import-modal').classList.remove('open'); document.getElementById('import-status').textContent = ''; }
+function switchTab(t) {
+  activeImportTab = t;
+  ['file','gsheet','paste'].forEach(tab => {
+    const content = document.getElementById('tab-content-'+tab);
+    const btn = document.getElementById('tab-'+tab);
+    if (content) content.style.display = t === tab ? '' : 'none';
+    if (btn) btn.classList.toggle('active', t === tab);
+  });
+}
+
+let importCSVText = '';
+function handleFileUpload(ev) {
+  const f = ev.target.files[0];
+  if (!f) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    importCSVText = e.target.result;
+    document.getElementById('import-status').textContent = `✅ Archivo cargado: ${f.name} (${Math.round(f.size/1024)}KB)`;
+  };
+  reader.readAsText(f, 'utf-8');
+}
+
+function processImport() {
+  if (activeImportTab === 'gsheet') {
+    const url = document.getElementById('gsheet-url').value.trim();
+    if (!url) { document.getElementById('import-status').textContent = '⚠️ Pegá el link del Google Sheet publicado.'; return; }
+    document.getElementById('import-status').textContent = '⏳ Conectando con Google Sheets...';
+    const auto = document.getElementById('gsheet-auto').checked;
+    localStorage.setItem('partners_gsheet_url', url);
+    localStorage.setItem('partners_gsheet_auto', auto ? '1' : '0');
+    fetchGSheet(url);
+    return;
+  }
+  const csv = importCSVText || document.getElementById('csv-paste-area').value;
+  if (!csv.trim()) { document.getElementById('import-status').textContent = '⚠️ No hay datos para procesar.'; return; }
+  applyCSV(csv);
+}
+
+
+
+function applyCSV(csv, fromGSheet) {
+  try {
+    const parsed = parseHubSpotCSV(csv);
+    if (!parsed.length) { document.getElementById('import-status').textContent = '⚠️ No se encontraron emails válidos. Verificá el formato HubSpot en español.'; return; }
+    // Imported data wins — keep all fields including hour, br
+    const base = parsed.map(e => {
+      const o = { n: e.n, a: e.a, f: e.f, by: e.by, env: e.env, ent: e.ent, ab: e.ab, cl: e.cl };
+      if (e.hour !== undefined && e.hour !== null) o.hour = e.hour;
+      if (e.br !== undefined) o.br = e.br;
+      return o;
+    });
+    // Merge: imported first → imported wins on dedup
+    const merged = [...base, ...SEED_DATA];
+    const seen = new Set();
+    const deduped = merged.filter(e => { const k=e.n+'|'+e.f; if(seen.has(k)) return false; seen.add(k); return true; });
+    DATA = enrich(deduped.filter(e => e.f && e.f >= '2025-01-01'));
+    saveData(base);
+    buildPeriodSelector();
+    renderAll();
+    closeImport();
+  } catch (err) {
+    document.getElementById('import-status').textContent = '❌ Error procesando CSV: ' + err.message;
+  }
+}
+
+function parseHubSpotCSV(csv) {
+  const lines = csv.trim().split('\n');
+  if (lines.length < 2) throw new Error('CSV demasiado corto');
+
+  // Parse CSV with quoted fields
+  function parseLine(line) {
+    const result = []; let cur = '', inQ = false;
+    for (let i = 0; i < line.length; i++) {
+      const c = line[i];
+      if (c === '"') { inQ = !inQ; continue; }
+      if (c === ',' && !inQ) { result.push(cur.trim()); cur = ''; continue; }
+      cur += c;
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  const headers = parseLine(lines[0]);
+  const idx = k => headers.findIndex(h => h.toLowerCase().includes(k.toLowerCase()));
+
+  const iName   = idx('Nombre del correo');
+  const iAsunto = idx('Asunto');
+  const iFecha  = idx('Fecha de envío');
+  const iBy     = idx('Creada por');
+  const iEnv    = idx('Enviado');
+  const iEnt    = idx('Entregado');
+  const iAb     = idx('Abierto');
+  const iCl     = idx('Con clic');
+  const iTasaOR = idx('Tasa de apertura');
+  const iTasaBR = idx('Tasa de rebote');
+
+  if (iEnv < 0) throw new Error('No se encontró columna "Enviado". ¿Es un CSV de HubSpot en español?');
+
+  function n2i(s) {
+    if(!s||s==='-'||s==='') return 0;
+    s = s.trim().replace(/[$€%\s]/g,'');
+    // Spanish/European decimal: "902,00" → comma is decimal separator
+    if (/,\d+$/.test(s)) return Math.round(parseFloat(s.replace(/\./g,'').replace(',','.'))||0);
+    return parseInt(s.replace(/[.,]/g,''))||0;
+  }
+  function n2f(s) { if(!s||s==='-') return 0; return parseFloat(s.replace(',','.'))||0; }
+
+  function cleanDate(s) {
+    if(!s) return '';
+    const m = s.match(/(\d{4}-\d{2}-\d{2})|(\d{2}\/\d{2}\/\d{4})/);
+    if(!m) return s.slice(0,10);
+    if(m[1]) return m[1];
+    const [d,mo,y] = m[2].split('/'); return `${y}-${mo}-${d}`;
+  }
+
+  function extractHour(s) {
+    if(!s) return null;
+    // "2026-04-28 09:27:41" or "2026-04-28T09:27:41"
+    const m = s.match(/[T ](\d{2}):/);
+    return m ? parseInt(m[1]) : null;
+  }
+
+  const TEST_RE = /\[env[ií]o\s+prueba\]/i;
+
+  const result = [];
+  for (let i = 1; i < lines.length; i++) {
+    if (!lines[i].trim()) continue;
+    const row = parseLine(lines[i]);
+    const env = n2i(row[iEnv]);
+    if (env === 0) continue;
+    const name = row[iName] || '';
+    // Skip test-send emails
+    if (TEST_RE.test(name)) continue;
+    const rawFecha = row[iFecha] || '';
+    const hour = extractHour(rawFecha);
+
+    // Open count: prefer absolute number, fall back to rate × sent
+    let ab = iAb >= 0 ? n2i(row[iAb]) : 0;
+    if (ab === 0 && iTasaOR >= 0) {
+      const pct = n2f(row[iTasaOR]);
+      if (pct > 0) ab = Math.round(env * pct / 100);
+    }
+
+    // Bounce rate: direct % from HubSpot (already a percentage, e.g. 0.195)
+    let br = iTasaBR >= 0 ? n2f(row[iTasaBR]) : undefined;
+
+    const obj = {
+      n: name,
+      a: row[iAsunto] || '',
+      f: cleanDate(rawFecha),
+      by: row[iBy] || '',
+      env,
+      ent: iEnt >= 0 ? n2i(row[iEnt]) : env,
+      ab,
+      cl: iCl >= 0 ? n2i(row[iCl]) : 0
+    };
+    if (hour !== null) obj.hour = hour;
+    if (br !== undefined) obj.br = br;
+    result.push(obj);
+  }
+  return result;
+}
+
+// Close modal on background click
+document.getElementById('import-modal').addEventListener('click', e => { if(e.target === e.currentTarget) closeImport(); });
+
+// ═══ SIDEBAR ACTIVE STATE ═══
+function initSidebarObserver() {
+  const links = document.querySelectorAll('.sb-link[data-target]');
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        links.forEach(l => l.classList.remove('active'));
+        const active = document.querySelector(`.sb-link[data-target="${entry.target.id}"]`);
+        if (active) active.classList.add('active');
+      }
+    });
+  }, { rootMargin: '-8% 0px -80% 0px', threshold: 0 });
+  document.querySelectorAll('section.section[id]').forEach(s => observer.observe(s));
+}
+
+// ═══ INIT ═══
+initData().then(() => {
+  buildPeriodSelector();
+  renderAll();
+  initSidebarObserver();
+});
+</script>
+</body>
+</html>
